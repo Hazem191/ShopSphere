@@ -42,7 +42,6 @@ namespace ShopSphere.Controllers
             return View(GetCart());
         }
 
-        // Works as GET (direct link) and POST (AJAX)
         [AcceptVerbs("GET", "POST")]
         public IActionResult Add(int productId)
         {
@@ -71,7 +70,6 @@ namespace ShopSphere.Controllers
 
             SaveCart(cart);
 
-            // AJAX request → return JSON
             if (Request.IsAjax())
             {
                 int totalItems = cart.Sum(c => c.Quantity);
@@ -79,7 +77,6 @@ namespace ShopSphere.Controllers
                 return Json(new { success = true, message, totalItems });
             }
 
-            // Normal GET (e.g. from Details page) → redirect back
             TempData["Success"] = product.Name + " added to cart!";
             return RedirectToAction("Index", "Catalog");
         }

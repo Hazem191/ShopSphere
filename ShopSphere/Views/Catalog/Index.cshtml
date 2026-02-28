@@ -16,14 +16,28 @@
     .product-card:hover .product-img-wrapper img { transform: scale(1.1); }
     
     .price-tag { color: #6c3fc5; font-weight: 800; font-size: 1.25rem; }
-    .category-sidebar { position: sticky; top: 100px; }
+    .category-sidebar { 
+        position: sticky; 
+        top: 100px; 
+        max-height: calc(100vh - 120px); 
+        overflow-y: auto; 
+    }
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .category-sidebar::-webkit-scrollbar { display: none; }
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .category-sidebar { -ms-overflow-style: none; scrollbar-width: none; }
+
     .filter-card { border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border-radius: 20px; }
     
     .list-group-item.active { background-color: #6c3fc5 !important; border-color: #6c3fc5 !important; }
     .btn-stepper { width: 32px; height: 32px; border-radius: 50% !important; display: flex; align-items: center; justify-content: center; padding: 0; }
-    
-    /* Animation for the Add/Qty transition */
-    .action-container { min-height: 42px; position: relative; }
+
+    /* Fix select arrow overlap in RTL */
+    [dir="rtl"] .form-select {
+        background-position: left 0.75rem center;
+        padding-left: 2.5rem !important;
+        padding-right: 1rem !important;
+    }
 </style>
 }
 
@@ -40,7 +54,7 @@
                     <label class="form-label small text-muted text-uppercase fw-bold tracking-wider">@Localizer["البحث"]</label>
                     <div class="input-group">
                         <input type="text" name="q" class="form-control border-end-0 rounded-start-pill px-3 shadow-none @(isRTL ? "rounded-start-0 rounded-end-pill border-start-0" : "")" 
-                               placeholder='@Localizer["ماذا تبحث عنه؟"]' value="@Model.SearchQuery" />
+                               placeholder='@Localizer["ما الذي تبحث عنه؟"]' value="@Model.SearchQuery" />
                         <button class="btn btn-primary rounded-end-pill px-3 @(isRTL ? "rounded-end-0 rounded-start-pill" : "")" type="submit">
                             <i class="fas fa-search"></i>
                         </button>

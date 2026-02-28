@@ -57,7 +57,6 @@ namespace ShopSphere.Controllers
                 TotalCount         = total
             };
 
-            // Pass cart quantities to show stepper correctly on reload
             var cartJson = HttpContext.Session.GetString("Cart");
             if (!string.IsNullOrEmpty(cartJson))
             {
@@ -72,7 +71,6 @@ namespace ShopSphere.Controllers
             var product = productRepo.GetById(id);
             if (product == null) return NotFound();
 
-            // Check if product is in cart to show qty stepper
             var cartJson = HttpContext.Session.GetString("Cart");
             int cartQty = 0;
             if (!string.IsNullOrEmpty(cartJson))

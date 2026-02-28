@@ -9,7 +9,6 @@ namespace ShopSphere.Data
         {
             context.Database.EnsureCreated();
 
-            // 1. Seed Categories if empty
             if (!context.Categories.Any())
             {
                 var categories = new Category[]
@@ -29,7 +28,6 @@ namespace ShopSphere.Data
                 context.SaveChanges();
             }
 
-            // 2. Seed Products if empty
             if (!context.Products.Any())
             {
                 // Get categories from DB to ensure we have correct IDs
@@ -40,7 +38,7 @@ namespace ShopSphere.Data
                 var products = new Product[]
                 {
                     // Electronics
-                    new Product { Name = "iPhone 15 Pro", SKU = "EL-AP-IP15", Price = 55000, StockQuantity = 15, IsActive = true, CategoryId = getCatId("Electronics"), Description = "Apple iPhone 15 Pro 256GB Titanium Blue", ImageUrl = "/images/product/iPhone 15 Pro.avif" },
+                    new Product { Name = "iPhone 15 Pro", SKU = "EL-AP-IP15", Price = 55000, StockQuantity = 15, IsActive = true, CategoryId = getCatId("Electronics"), Description = "Apple iPhone 15 Pro 256GB Titanium Blue", ImageUrl = "/images/product/iPhone 15 Pro.jpeg" },
                     new Product { Name = "Samsung QLED 4K TV", SKU = "EL-SS-TV55", Price = 32000, StockQuantity = 8, IsActive = true, CategoryId = getCatId("Electronics"), Description = "55 Inch Smart TV", ImageUrl = "/images/product/Samsung QLED 4K TV.jpeg" },
                     new Product { Name = "Sony DualSense Controller", SKU = "EL-SN-PS5C", Price = 3500, StockQuantity = 25, IsActive = true, CategoryId = getCatId("Electronics"), Description = "PS5 Wireless Controller", ImageUrl = "/images/product/Sony DualSense Controller.jpeg" },
 

@@ -59,19 +59,24 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="المنتجات" xml:space="preserve"><value>Products</value></data>
-  <data name="تصفية المنتجات" xml:space="preserve"><value>Filter Products</value></data>
+  <data name="تصفية النتائج" xml:space="preserve"><value>Filter Results</value></data>
   <data name="البحث" xml:space="preserve"><value>Search</value></data>
-  <data name="اسم المنتج..." xml:space="preserve"><value>Product name...</value></data>
-  <data name="الفئة" xml:space="preserve"><value>Category</value></data>
-  <data name="جميع الفئات" xml:space="preserve"><value>All Categories</value></data>
-  <data name="الترتيب" xml:space="preserve"><value>Sort By</value></data>
-  <data name="الأحدث" xml:space="preserve"><value>Newest</value></data>
-  <data name="السعر: الأقل أولاً" xml:space="preserve"><value>Price: Low to High</value></data>
-  <data name="السعر: الأعلى أولاً" xml:space="preserve"><value>Price: High to Low</value></data>
-  <data name="الاسم أ-ي" xml:space="preserve"><value>Name: A-Z</value></data>
-  <data name="نتائج" xml:space="preserve"><value>Results</value></data>
-  <data name="منتج" xml:space="preserve"><value>Product</value></data>
-  <data name="لا توجد منتجات تطابق بحثك." xml:space="preserve"><value>No products match your search.</value></data>
+  <data name="ما الذي تبحث عنه؟" xml:space="preserve"><value>What are you looking for?</value></data>
+  <data name="الأقسام" xml:space="preserve"><value>Categories</value></data>
+  <data name="جميع المنتجات" xml:space="preserve"><value>All Products</value></data>
+  <data name="ترتيب حسب" xml:space="preserve"><value>Sort By</value></data>
+  <data name="الأحدث إضافة" xml:space="preserve"><value>Newest Arrivals</value></data>
+  <data name="السعر: من الأقل للأعلى" xml:space="preserve"><value>Price: Low to High</value></data>
+  <data name="السعر: من الأعلى للأقل" xml:space="preserve"><value>Price: High to Low</value></data>
+  <data name="الاسم (أ - ي)" xml:space="preserve"><value>Name: A - Z</value></data>
+  <data name="الرئيسية" xml:space="preserve"><value>Home</value></data>
+  <data name="المتجر" xml:space="preserve"><value>Store</value></data>
+  <data name="نتائج البحث لـ" xml:space="preserve"><value>Search results for</value></data>
+  <data name="منتج متوفر" xml:space="preserve"><value>Products available</value></data>
+  <data name="عذراً، لم نجد ما تبحث عنه" xml:space="preserve"><value>Sorry, we couldn't find what you're looking for</value></data>
+  <data name="حاول البحث بكلمة أخرى أو تغيير الفئة المختارة" xml:space="preserve"><value>Try searching with a different word or changing the selected category</value></data>
+  <data name="اكتشف كل المنتجات" xml:space="preserve"><value>Discover all products</value></data>
+  <data name="لا يوجد وصف لهذا المنتج" xml:space="preserve"><value>No description available for this product</value></data>
   <data name="ج.م" xml:space="preserve"><value>EGP</value></data>
   <data name="متوفر" xml:space="preserve"><value>In Stock</value></data>
   <data name="نفد" xml:space="preserve"><value>Out of Stock</value></data>

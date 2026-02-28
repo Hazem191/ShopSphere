@@ -75,7 +75,6 @@ namespace ShopSphere.Controllers
 
             if (!cartItems.Any()) return RedirectToAction("Index", "Cart");
 
-            // Handle inline new address
             int addressId = vm.SelectedAddressId;
             if (vm.NewAddress != null &&
                 !string.IsNullOrWhiteSpace(vm.NewAddress.City) &&
