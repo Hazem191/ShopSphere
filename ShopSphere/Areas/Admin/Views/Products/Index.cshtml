@@ -1,0 +1,77 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model List<Product>
+@{
+    ViewData["Title"] = Localizer["إدارة المنتجات"];
+    var isRTL = System.Globalization.CultureInfo.CurrentCulture.Name.StartsWith("ar");
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="section-title mb-0"><i class="fas fa-boxes me-2"></i> @Localizer["المنتجات"]</h2>
+    <a asp-action="Create" class="btn btn-primary rounded-pill px-4 shadow-sm border-0">
+        <i class="fas fa-plus me-2"></i> @Localizer["منتج جديد"]
+    </a>
+</div>
+
+<div class="card shadow-sm border-0" style="border-radius:15px;">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">#</th>
+                        <th>@Localizer["اسم المنتج"]</th>
+                        <th>@Localizer["الفئة"]</th>
+                        <th>SKU</th>
+                        <th class="text-center">@Localizer["السعر"]</th>
+                        <th class="text-center">@Localizer["المخزون"]</th>
+                        <th class="text-center">@Localizer["الحالة"]</th>
+                        <th class="text-center pe-4">@Localizer["الإجراءات"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="8" class="text-center text-muted py-5">@Localizer["لا توجد منتجات بعد"]</td></tr>
+                    }
+                    @foreach (var p in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 text-muted small">@p.Id</td>
+                            <td class="fw-semibold">@p.Name</td>
+                            <td>
+                                <span class="badge bg-info text-white rounded-pill px-3">
+                                    <i class="fas fa-tag me-1 small"></i> @(p.Category?.Name ?? "--")
+                                </span>
+                            </td>
+                            <td><code class="text-primary bg-light px-2 py-1 rounded small">@p.SKU</code></td>
+                            <td class="text-center fw-bold text-primary">@p.Price.ToString("N2") @Localizer["ج.م"]</td>
+                            <td class="text-center">
+                                <span class="badge @(p.StockQuantity > 5 ? "bg-success" : p.StockQuantity > 0 ? "bg-warning text-dark" : "bg-danger") rounded-pill px-3">
+                                    @p.StockQuantity
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge @(p.IsActive ? "bg-success" : "bg-secondary") rounded-pill px-3">
+                                    @(p.IsActive ? Localizer["نشط"] : Localizer["مخفي"])
+                                </span>
+                            </td>
+                            <td class="text-center pe-4">
+                                <div class="btn-group">
+                                    <a asp-action="Edit" asp-route-id="@p.Id" class="btn btn-outline-warning btn-sm rounded-circle me-1" style="width:32px;height:32px;padding:0;display:inline-flex;align-items:center;justify-content:center;">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@p.Id"
+                                       class="btn btn-outline-danger btn-sm rounded-circle" style="width:32px;height:32px;padding:0;display:inline-flex;align-items:center;justify-content:center;"
+                                       onclick="return confirm('@Localizer["هل تريد حذف هذا المنتج؟"]')">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

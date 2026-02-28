@@ -1,0 +1,74 @@
+html {
+  font-size: 14px;
+  scroll-behavior: smooth;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+    font-family: 'Cairo', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #2d3748;
+    background-color: #f7fafc;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #a0aec0;
+}
+
+/* Glassmorphism Utility */
+.glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Modern Borders */
+.border-light {
+    border-color: rgba(0,0,0,0.05) !important;
+}
+
+/* Floating Label RTL Fixes */
+[dir="rtl"] .form-floating > label {
+    right: 0 !important;
+    left: auto !important;
+    transform-origin: 100% 0 !important;
+    padding-right: 1.5rem !important;
+}
+
+[dir="rtl"] .form-floating > .form-control:focus ~ label,
+[dir="rtl"] .form-floating > .form-control:not(:placeholder-shown) ~ label {
+    transform: scale(.85) translateY(-0.7rem) translateX(0.5rem) !important;
+}
+
+/* Links & Buttons */
+.transition-all {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #6c3fc5, #8e44ad);
+    border: none;
+    box-shadow: 0 4px 14px 0 rgba(108, 63, 197, 0.39);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(108, 63, 197, 0.45);
+    background: linear-gradient(135deg, #5a33a8, #7d3c98);
+}

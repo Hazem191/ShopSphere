@@ -1,0 +1,64 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model List<Category>
+@{
+    ViewData["Title"] = Localizer["إدارة الفئات"];
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="section-title mb-0"><i class="fas fa-tags me-2"></i> @Localizer["الفئات"]</h2>
+    <a asp-action="Create" class="btn btn-primary rounded-pill px-4 shadow-sm border-0">
+        <i class="fas fa-plus me-2"></i> @Localizer["إضافة فئة جديدة"]
+    </a>
+</div>
+
+<div class="card shadow-sm border-0" style="border-radius:15px;">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">#</th>
+                        <th>@Localizer["اسم الفئة"]</th>
+                        <th class="text-center">@Localizer["عدد المنتجات"]</th>
+                        <th class="text-center pe-4">@Localizer["الإجراءات"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center text-muted py-5">@Localizer["لا توجد فئات بعد"]</td>
+                        </tr>
+                    }
+                    @foreach (var cat in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 text-muted small">@cat.Id</td>
+                            <td class="fw-semibold">
+                                <span class="badge bg-light text-dark border rounded-pill px-3 py-2">
+                                    <i class="fas fa-tag me-2 text-primary"></i> @cat.Name
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-primary rounded-pill px-3">@(cat.Products?.Count ?? 0)</span>
+                            </td>
+                            <td class="text-center pe-4">
+                                <div class="btn-group">
+                                    <a asp-action="Edit" asp-route-id="@cat.Id" class="btn btn-outline-warning btn-sm rounded-pill px-3 me-2">
+                                        <i class="fas fa-edit me-1"></i> @Localizer["تعديل"]
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@cat.Id"
+                                       class="btn btn-outline-danger btn-sm rounded-pill px-3"
+                                       onclick="return confirm('@Localizer["هل أنت متأكد من حذف هذه الفئة؟"]')">
+                                        <i class="fas fa-trash-alt me-1"></i> @Localizer["حذف"]
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

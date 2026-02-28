@@ -1,0 +1,140 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Order
+@{
+    ViewData["Title"] = Localizer["إدارة تفاصيل الطلب"];
+    var items = ViewBag.Items as List<OrderItem>;
+}
+
+<div class="mb-4 d-flex justify-content-between align-items-center">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a asp-action="Index">@Localizer["الطلبات"]</a></li>
+            <li class="breadcrumb-item active">@Model.OrderNumber</li>
+        </ol>
+    </nav>
+    <a asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-pill">
+        <i class="fas fa-arrow-right me-1"></i> @Localizer["عودة لقائمة الطلبات"]
+    </a>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white fw-bold py-3">
+                <i class="fas fa-list me-2 text-primary"></i> @Localizer["محتويات الطلب"]
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="ps-4">@Localizer["المنتج"]</th>
+                                <th class="text-center">@Localizer["السعر"]</th>
+                                <th class="text-center">@Localizer["الكمية"]</th>
+                                <th class="text-end pe-4">@Localizer["الإجمالي"]</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in items)
+                            {
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="fw-bold">@item.Product?.Name</div>
+                                        <small class="text-muted">SKU: @item.Product?.SKU</small>
+                                    </td>
+                                    <td class="text-center">@item.UnitPrice.ToString("N2") @Localizer["ج.م"]</td>
+                                    <td class="text-center">@item.Quantity</td>
+                                    <td class="text-end pe-4 fw-bold">@item.LineTotal.ToString("N2") @Localizer["ج.م"]</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot class="bg-light">
+                            <tr>
+                                <td colspan="3" class="text-end fw-bold py-3 ps-4">@Localizer["المجموع الكلي:"]</td>
+                                <td class="text-end pe-4 fw-bold fs-5 text-primary py-3">@Model.TotalAmount.ToString("N2") @Localizer["ج.م"]</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white fw-bold py-3">
+                <i class="fas fa-truck me-2 text-primary"></i> @Localizer["معلومات الشحن والعميل"]
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-4 mb-md-0">
+                        <h6 class="fw-bold text-muted border-bottom pb-2">@Localizer["تفاصيل العميل"]</h6>
+                        <p class="mb-1"><i class="fas fa-user me-2 text-secondary"></i> @Model.User?.FullName</p>
+                        <p class="mb-1"><i class="fas fa-envelope me-2 text-secondary"></i> @Model.User?.Email</p>
+                        <p class="mb-1"><i class="fas fa-phone me-2 text-secondary"></i> @Model.User?.PhoneNumber</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-muted border-bottom pb-2">@Localizer["عنوان التوصيل"]</h6>
+                        @if (Model.Address != null)
+                        {
+                            <p class="mb-1"><strong>@Model.Address.City</strong></p>
+                            <p class="mb-1">@Model.Address.Street، @Model.Address.Building</p>
+                        }
+                        else
+                        {
+                            <p class="text-danger italic">@Localizer["العنوان غير متوفر"]</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white fw-bold py-3">
+                <i class="fas fa-cog me-2 text-primary"></i> @Localizer["إجراءات الطلب"]
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <label class="form-label text-muted small fw-bold">@Localizer["الحالة الحالية"]</label>
+                    <div class="h5 mb-0">
+                        @{
+                            var badgeClass = Model.Status switch
+                            {
+                                "Pending" => "bg-warning text-dark",
+                                "Processing" => "bg-info text-white",
+                                "Shipped" => "bg-primary text-white",
+                                "Delivered" => "bg-success text-white",
+                                "Cancelled" => "bg-danger text-white",
+                                _ => "bg-secondary text-white"
+                            };
+                        }
+                        <span class="badge @badgeClass rounded-pill">@Localizer[Model.Status]</span>
+                    </div>
+                    <small class="text-muted">@Localizer["آخر تحديث:"] @Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")</small>
+                </div>
+
+                <hr>
+
+                <form asp-action="UpdateStatus" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">@Localizer["تغيير الحالة إلى:"]</label>
+                        <select name="status" class="form-select">
+                            <option value="Pending" selected="@(Model.Status == "Pending")">Pending (@Localizer["Pending"])</option>
+                            <option value="Processing" selected="@(Model.Status == "Processing")">Processing (@Localizer["Processing"])</option>
+                            <option value="Shipped" selected="@(Model.Status == "Shipped")">Shipped (@Localizer["Shipped"])</option>
+                            <option value="Delivered" selected="@(Model.Status == "Delivered")">Delivered (@Localizer["Delivered"])</option>
+                            <option value="Cancelled" selected="@(Model.Status == "Cancelled")">Cancelled (@Localizer["Cancelled"])</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-bold">
+                        <i class="fas fa-save me-1"></i> @Localizer["تحديث الحالة"]
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

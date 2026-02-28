@@ -1,0 +1,53 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["الرئيسية"];
+    var isRTL = System.Globalization.CultureInfo.CurrentCulture.Name.StartsWith("ar");
+}
+
+<div class="rounded-4 text-white p-5 mb-5 shadow" style="background: linear-gradient(135deg,#6c3fc5,#9b6ef3);">
+    <div class="row align-items-center">
+        <div class="col-md-7">
+            <h1 class="display-4 fw-bold mb-3">
+                <i class="fas fa-store me-2"></i> @Localizer["مرحباً بك في ShopSphere"]
+            </h1>
+            <p class="lead mb-4">@Localizer["اكتشف أحدث المنتجات بأفضل الأسعار. تسوق بسهولة وأمان."]</p>
+            <a asp-controller="Catalog" asp-action="Index" class="btn btn-light btn-lg fw-bold px-5 rounded-pill shadow-sm">
+                <i class="fas fa-th me-2"></i> @Localizer["تصفح المنتجات"]
+            </a>
+        </div>
+        <div class="col-md-5 text-center d-none d-md-block">
+            <i class="fas fa-shopping-bag" style="font-size:8rem;opacity:.3;"></i>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-md-4">
+        <div class="card h-100 text-center p-4 shadow-sm border-0">
+            <div class="mb-3"><i class="fas fa-truck fa-3x text-primary"></i></div>
+            <h5 class="fw-bold">@Localizer["شحن سريع"]</h5>
+            <p class="text-muted small">@Localizer["نوصّل طلبك في أسرع وقت ممكن"]</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 text-center p-4 shadow-sm border-0">
+            <div class="mb-3"><i class="fas fa-shield-alt fa-3x text-success"></i></div>
+            <h5 class="fw-bold">@Localizer["دفع آمن"]</h5>
+            <p class="text-muted small">@Localizer["جميع معاملاتك محمية وآمنة"]</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 text-center p-4 shadow-sm border-0">
+            <div class="mb-3"><i class="fas fa-undo fa-3x text-warning"></i></div>
+            <h5 class="fw-bold">@Localizer["إرجاع مجاني"]</h5>
+            <p class="text-muted small">@Localizer["أرجع طلبك خلال 14 يوم بدون أي رسوم"]</p>
+        </div>
+    </div>
+</div>
+
+<div class="text-center py-4">
+    <a asp-controller="Catalog" asp-action="Index" class="btn btn-primary btn-lg px-5 rounded-pill shadow-sm border-0 py-3 fw-bold">
+        <i class="fas fa-@(isRTL ? "arrow-right" : "arrow-left") me-2"></i> @Localizer["ابدأ التسوق الآن"]
+    </a>
+</div>

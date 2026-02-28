@@ -1,0 +1,58 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using ShopSphere.Models
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    var currentUser = await UserManager.GetUserAsync(User);
+    var displayName = currentUser?.FullName ?? User.Identity?.Name?.Split('@')[0];
+    var isRTL = System.Globalization.CultureInfo.CurrentCulture.Name.StartsWith("ar");
+
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle fw-bold d-flex align-items-center no-caret" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-user-circle fs-5 me-2"></i> 
+            <span class="d-none d-lg-inline">@Localizer["مرحباً"]، @displayName</span>
+            <span class="d-inline d-lg-none">@Localizer["حسابي"]</span>
+            <i class="fas fa-chevron-down small opacity-50 ms-2"></i>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="userDropdown">
+            <li>
+                <a class="dropdown-item py-2" asp-area="Identity" asp-page="/Account/Manage/Index">
+                    <i class="fas fa-user-cog me-2 text-muted"></i> @Localizer["إعدادات الحساب"]
+                </a>
+            </li>
+            @if (!User.IsInRole("Admin"))
+            {
+                <li>
+                    <a class="dropdown-item py-2" asp-area="" asp-controller="Orders" asp-action="Index">
+                        <i class="fas fa-box me-2 text-muted"></i> @Localizer["طلباتي"]
+                    </a>
+                </li>
+            }
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button type="submit" class="dropdown-item py-2 text-danger">
+                        <i class="fas fa-sign-out-alt me-2"></i> @Localizer["تسجيل الخروج"]
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link fw-semibold" asp-area="Identity" asp-page="/Account/Register">
+            <i class="fas fa-user-plus me-1"></i> @Localizer["تسجيل جديد"]
+        </a>
+    </li>
+    <li class="nav-item ms-lg-2">
+        <a class="btn btn-primary btn-sm rounded-pill px-4 shadow-sm border-0" asp-area="Identity" asp-page="/Account/Login">
+            <i class="fas fa-sign-in-alt me-1"></i> @Localizer["دخول"]
+        </a>
+    </li>
+}

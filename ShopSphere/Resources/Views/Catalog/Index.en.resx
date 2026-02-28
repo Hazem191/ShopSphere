@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="المنتجات" xml:space="preserve"><value>Products</value></data>
+  <data name="تصفية المنتجات" xml:space="preserve"><value>Filter Products</value></data>
+  <data name="البحث" xml:space="preserve"><value>Search</value></data>
+  <data name="اسم المنتج..." xml:space="preserve"><value>Product name...</value></data>
+  <data name="الفئة" xml:space="preserve"><value>Category</value></data>
+  <data name="جميع الفئات" xml:space="preserve"><value>All Categories</value></data>
+  <data name="الترتيب" xml:space="preserve"><value>Sort By</value></data>
+  <data name="الأحدث" xml:space="preserve"><value>Newest</value></data>
+  <data name="السعر: الأقل أولاً" xml:space="preserve"><value>Price: Low to High</value></data>
+  <data name="السعر: الأعلى أولاً" xml:space="preserve"><value>Price: High to Low</value></data>
+  <data name="الاسم أ-ي" xml:space="preserve"><value>Name: A-Z</value></data>
+  <data name="نتائج" xml:space="preserve"><value>Results</value></data>
+  <data name="منتج" xml:space="preserve"><value>Product</value></data>
+  <data name="لا توجد منتجات تطابق بحثك." xml:space="preserve"><value>No products match your search.</value></data>
+  <data name="ج.م" xml:space="preserve"><value>EGP</value></data>
+  <data name="متوفر" xml:space="preserve"><value>In Stock</value></data>
+  <data name="نفد" xml:space="preserve"><value>Out of Stock</value></data>
+  <data name="التفاصيل" xml:space="preserve"><value>Details</value></data>
+  <data name="أضف" xml:space="preserve"><value>Add to Cart</value></data>
+</root>

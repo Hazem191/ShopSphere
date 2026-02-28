@@ -1,0 +1,283 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@model ProductListVM
+
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["المنتجات"];
+    var isRTL = System.Globalization.CultureInfo.CurrentCulture.Name.StartsWith("ar");
+}
+
+@section Styles {
+<style>
+    .product-card { transition: all .4s cubic-bezier(0.165, 0.84, 0.44, 1); border: 1px solid rgba(0,0,0,0.05) !important; overflow: hidden; }
+    .product-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(108,63,197,0.1) !important; border-color: rgba(108,63,197,0.2) !important; }
+    .product-img-wrapper { position: relative; height: 230px; background: #fafafa; overflow: hidden; }
+    .product-img-wrapper img { transition: transform .6s ease; width: 100%; height: 100%; object-fit: cover; }
+    .product-card:hover .product-img-wrapper img { transform: scale(1.1); }
+    
+    .price-tag { color: #6c3fc5; font-weight: 800; font-size: 1.25rem; }
+    .category-sidebar { position: sticky; top: 100px; }
+    .filter-card { border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border-radius: 20px; }
+    
+    .list-group-item.active { background-color: #6c3fc5 !important; border-color: #6c3fc5 !important; }
+    .btn-stepper { width: 32px; height: 32px; border-radius: 50% !important; display: flex; align-items: center; justify-content: center; padding: 0; }
+    
+    /* Animation for the Add/Qty transition */
+    .action-container { min-height: 42px; position: relative; }
+</style>
+}
+
+<div class="row g-4 @(isRTL ? "flex-row-reverse" : "")">
+    <!-- Sidebar Filters -->
+    <div class="col-lg-3">
+        <div class="filter-card card p-4 category-sidebar">
+            <h5 class="fw-bold mb-4 d-flex align-items-center">
+                <i class="fas fa-sliders me-3 text-primary ms-0"></i> @Localizer["تصفية النتائج"]
+            </h5>
+            
+            <form method="get" asp-action="Index">
+                <div class="mb-4">
+                    <label class="form-label small text-muted text-uppercase fw-bold tracking-wider">@Localizer["البحث"]</label>
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control border-end-0 rounded-start-pill px-3 shadow-none @(isRTL ? "rounded-start-0 rounded-end-pill border-start-0" : "")" 
+                               placeholder='@Localizer["ماذا تبحث عنه؟"]' value="@Model.SearchQuery" />
+                        <button class="btn btn-primary rounded-end-pill px-3 @(isRTL ? "rounded-end-0 rounded-start-pill" : "")" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label small text-muted text-uppercase fw-bold tracking-wider">@Localizer["الأقسام"]</label>
+                    <div class="list-group list-group-flush rounded-4 overflow-hidden border">
+                        <a href="?q=@Model.SearchQuery&sort=@Model.Sort"
+                           class="list-group-item list-group-item-action py-3 @(Model.SelectedCategoryId == null ? "active" : "")">
+                            @Localizer["جميع المنتجات"]
+                        </a>
+                        @foreach (var cat in Model.Categories)
+                        {
+                            <a href="?categoryId=@cat.Id&q=@Model.SearchQuery&sort=@Model.Sort"
+                               class="list-group-item list-group-item-action py-3 @(Model.SelectedCategoryId == cat.Id ? "active" : "")">
+                                @cat.Name
+                            </a>
+                        }
+                    </div>
+                </div>
+
+                <div class="mb-0">
+                    <label class="form-label small text-muted text-uppercase fw-bold tracking-wider">@Localizer["ترتيب حسب"]</label>
+                    <select name="sort" class="form-select rounded-pill px-3 shadow-none border" onchange="this.form.submit()">
+                        <option value="" selected="@(Model.Sort == null)">@Localizer["الأحدث إضافة"]</option>
+                        <option value="price_asc" selected="@(Model.Sort == "price_asc")">@Localizer["السعر: من الأقل للأعلى"]</option>
+                        <option value="price_desc" selected="@(Model.Sort == "price_desc")">@Localizer["السعر: من الأعلى للأقل"]</option>
+                        <option value="name" selected="@(Model.Sort == "name")">@Localizer["الاسم (أ - ي)"]</option>
+                    </select>
+                    <input type="hidden" name="categoryId" value="@Model.SelectedCategoryId" />
+                    <input type="hidden" name="q" value="@Model.SearchQuery" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="col-lg-9">
+        <div class="d-flex justify-content-between align-items-end mb-5">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-2">
+                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-decoration-none text-muted">@Localizer["الرئيسية"]</a></li>
+                        <li class="breadcrumb-item active text-primary fw-bold" aria-current="page">@Localizer["المتجر"]</li>
+                    </ol>
+                </nav>
+                <h2 class="fw-bold mb-0">
+                    @if (!string.IsNullOrEmpty(Model.SearchQuery))
+                    { <span>@Localizer["نتائج البحث لـ"] <span class="text-primary">"@Model.SearchQuery"</span></span> }
+                    else
+                    { @Localizer["جميع المنتجات"] }
+                </h2>
+            </div>
+            <div class="text-muted fw-bold">@Model.TotalCount <span class="small fw-normal">@Localizer["منتج متوفر"]</span></div>
+        </div>
+
+        @if (!Model.Products.Any())
+        {
+            <div class="text-center py-5 bg-white rounded-5 shadow-sm">
+                <div class="mb-4 d-inline-flex align-items-center justify-content-center" style="width:120px; height:120px; border-radius:40px; background:#f8f9fa;">
+                    <i class="fas fa-box-open fa-3x text-muted opacity-25"></i>
+                </div>
+                <h4 class="text-dark fw-bold">@Localizer["عذراً، لم نجد ما تبحث عنه"]</h4>
+                <p class="text-muted">@Localizer["حاول البحث بكلمة أخرى أو تغيير الفئة المختارة"]</p>
+                <a asp-action="Index" class="btn btn-primary rounded-pill mt-3 px-5 py-2 fw-bold">@Localizer["اكتشف كل المنتجات"]</a>
+            </div>
+        }
+        else
+        {
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                @foreach (var p in Model.Products)
+                {
+                    var cartItems = ViewBag.Cart as List<CartItemVM>;
+                    var itemInCart = cartItems?.FirstOrDefault(c => c.ProductId == p.Id);
+                    int currentQty = itemInCart?.Quantity ?? 0;
+
+                    <div class="col">
+                        <div class="card h-100 product-card border-0 bg-white rounded-4">
+                            <!-- Image -->
+                            <div class="product-img-wrapper">
+                                @if (!string.IsNullOrEmpty(p.ImageUrl))
+                                {
+                                    <img src="@p.ImageUrl" alt="@p.Name" />
+                                }
+                                else
+                                {
+                                    <div class="d-flex align-items-center justify-content-center h-100 bg-light">
+                                        <i class="fas fa-couch fa-4x text-muted opacity-25"></i>
+                                    </div>
+                                }
+                                <div class="position-absolute top-0 @(isRTL ? "start" : "end")-0 p-3">
+                                    <span class="badge @(p.StockQuantity > 0 ? "bg-success" : "bg-danger") rounded-pill shadow-sm">
+                                        @(p.StockQuantity > 0 ? Localizer["متوفر"] : Localizer["نفد"])
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Body -->
+                            <div class="card-body p-4 d-flex flex-column">
+                                <h5 class="fw-bold mb-2 text-dark">@p.Name</h5>
+                                <p class="text-muted small mb-4 flex-grow-1 line-clamp-2">
+                                    @(p.Description?.Length > 80 ? p.Description.Substring(0, 80) + "..." : (p.Description ?? Localizer["لا يوجد وصف لهذا المنتج"].Value))
+                                </p>
+                                
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="price-tag">
+                                        @p.Price.ToString("N0") <span class="small fw-normal h6 opacity-75">@Localizer["ج.م"]</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Footer Actions -->
+                            <div class="card-footer bg-white border-0 px-4 pb-4">
+                                <div class="action-container d-flex gap-2 align-items-center">
+                                    <a asp-action="Details" asp-route-id="@p.Id" class="btn btn-light rounded-pill px-3 border flex-fill fw-bold">
+                                        @Localizer["التفاصيل"]
+                                    </a>
+
+                                    @if (p.StockQuantity > 0 && !User.IsInRole("Admin"))
+                                    {
+                                        <!-- Unified Button/Stepper -->
+                                        <div class="flex-fill">
+                                            <button type="button" onclick="addToCart(this, @p.Id)" id="addbtn-@p.Id" 
+                                                    class="btn btn-primary w-100 rounded-pill fw-bold @(currentQty > 0 ? "d-none" : "")">
+                                                <i class="fas fa-cart-plus me-2 ms-0"></i> @Localizer["أضف"]
+                                            </button>
+
+                                            <div id="stepper-@p.Id" class="align-items-center justify-content-between bg-light rounded-pill p-1 border @(currentQty > 0 ? "d-flex" : "d-none")">
+                                                <button type="button" onclick="changeQty(@p.Id, -1)" class="btn btn-white btn-stepper shadow-sm border">
+                                                    <i class="fas fa-minus text-muted small"></i>
+                                                </button>
+                                                <span id="qcount-@p.Id" class="fw-bold px-2 text-primary">@currentQty</span>
+                                                <button type="button" onclick="changeQty(@p.Id, 1)" class="btn btn-white btn-stepper shadow-sm border">
+                                                    <i class="fas fa-plus text-primary small"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Pagination -->
+            @if (Model.TotalPages > 1)
+            {
+                <nav class="mt-5 pt-4">
+                    <ul class="pagination pagination-modern justify-content-center gap-2">
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                <a class="page-link border-0 shadow-sm rounded-3" 
+                                   href="?categoryId=@Model.SelectedCategoryId&q=@Model.SearchQuery&sort=@Model.Sort&page=@i">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
+        }
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast-container position-fixed bottom-0 @(isRTL ? "start" : "end")-0 p-3">
+    <div id="cartToast" class="toast border-0 shadow-lg rounded-4 overflow-hidden" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex align-items-center py-3 px-4 bg-primary text-white">
+            <i class="fas fa-check-circle me-3 fs-4"></i>
+            <div class="toast-body p-0 fw-bold" id="toastMsg"></div>
+            <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+
+@Html.AntiForgeryToken()
+
+@section Scripts {
+<script>
+    function addToCart(btn, productId) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+        fetch(`/Cart/Add?productId=${productId}`, {
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(r => r.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-cart-plus me-2 ms-0"></i> @Localizer["أضف"]';
+            if (data.success) {
+                btn.classList.add('d-none');
+                const stepper = document.getElementById(`stepper-${productId}`);
+                stepper.classList.remove('d-none');
+                stepper.classList.add('d-flex');
+                document.getElementById(`qcount-${productId}`).innerText = '1';
+                
+                showToast(data.message);
+                updateBadge(data.totalItems);
+            }
+        });
+    }
+
+    function changeQty(productId, delta) {
+        fetch(`/Cart/UpdateQty?productId=${productId}&delta=${delta}`, {
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (!data.success) return;
+            const qcount = document.getElementById(`qcount-${productId}`);
+            if (data.newQty <= 0) {
+                document.getElementById(`stepper-${productId}`).classList.replace('d-flex', 'd-none');
+                document.getElementById(`addbtn-${productId}`).classList.remove('d-none');
+            } else {
+                qcount.innerText = data.newQty;
+            }
+            updateBadge(data.totalItems);
+        });
+    }
+
+    function updateBadge(count) {
+        const badge = document.getElementById('cart-count-badge');
+        if (badge) {
+            badge.innerText = count;
+            badge.style.display = count > 0 ? 'inline-block' : 'none';
+        }
+    }
+
+    function showToast(msg) {
+        document.getElementById('toastMsg').innerText = msg;
+        const toast = new bootstrap.Toast(document.getElementById('cartToast'));
+        toast.show();
+    }
+</script>
+}

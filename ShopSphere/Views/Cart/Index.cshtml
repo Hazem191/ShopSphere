@@ -1,0 +1,178 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model List<CartItemVM>
+@{
+    ViewData["Title"] = Localizer["سلة التسوق"];
+    var total = Model.Sum(x => x.LineTotal);
+    var isRTL = System.Globalization.CultureInfo.CurrentCulture.Name.StartsWith("ar");
+}
+
+<style>
+    .cart-img { width: 70px; height: 70px; object-fit: cover; border-radius: 12px; }
+    .cart-img-placeholder { width: 70px; height: 70px; border-radius: 12px; background: linear-gradient(135deg,#f3eeff,#e8d9ff); display:flex; align-items:center; justify-content:center; }
+    .qty-btn { width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; }
+    .cart-row { transition: background .2s; }
+    .cart-row:hover { background: #fafafa; }
+    .summary-card { position: sticky; top: 80px; }
+    .remove-btn { opacity: 0; transition: opacity .2s; }
+    .cart-row:hover .remove-btn { opacity: 1; }
+</style>
+
+<h2 class="section-title mb-4">
+    <i class="fas fa-shopping-cart me-2"></i> @Localizer["سلة التسوق"]
+    @if (Model.Any())
+    {
+        <span class="badge bg-primary rounded-pill ms-2" style="font-size:.65rem; vertical-align:middle;">@Model.Sum(x => x.Quantity)</span>
+    }
+</h2>
+
+@if (!Model.Any())
+{
+    <div class="text-center py-5">
+        <div class="mb-4" style="background:linear-gradient(135deg,#f3eeff,#e8d9ff); width:120px; height:120px; border-radius:50%; margin:0 auto; display:flex; align-items:center; justify-content:center;">
+            <i class="fas fa-shopping-cart fa-3x" style="color:#6c3fc5; opacity:.6;"></i>
+        </div>
+        <h4 class="text-muted mb-2">@Localizer["السلة فارغة"]</h4>
+        <p class="text-muted small mb-4">@Localizer["لم تضف أي منتجات بعد"]</p>
+        <a asp-controller="Catalog" asp-action="Index" class="btn btn-primary rounded-pill px-5 py-2 shadow-sm">
+            <i class="fas fa-store me-2"></i> @Localizer["تصفح المنتجات"]
+        </a>
+    </div>
+}
+else
+{
+    <div class="row g-4 @(isRTL ? "flex-row-reverse" : "")">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0" style="border-radius:16px; overflow:hidden;">
+                <div class="card-header bg-white border-0 px-4 pt-4 pb-2">
+                    <span class="fw-bold text-muted small">@Model.Sum(x => x.Quantity) @Localizer["منتج في السلة"]</span>
+                </div>
+                <div class="card-body p-0">
+                    @foreach (var item in Model)
+                    {
+                        <div class="cart-row d-flex align-items-center gap-3 px-4 py-3 border-bottom" id="row-@item.ProductId">
+                            <!-- Product Image -->
+                            @if (!string.IsNullOrEmpty(item.ImageUrl))
+                            {
+                                <img src="@item.ImageUrl" class="cart-img flex-shrink-0" alt="@item.ProductName" />
+                            }
+                            else
+                            {
+                                <div class="cart-img-placeholder flex-shrink-0">
+                                    <i class="fas fa-box" style="color:#6c3fc5; opacity:.5;"></i>
+                                </div>
+                            }
+
+                            <!-- Name -->
+                            <div class="flex-grow-1">
+                                <div class="fw-semibold">@item.ProductName</div>
+                                <small class="text-muted">@item.Price.ToString("N2") @Localizer["ج.م"]</small>
+                            </div>
+
+                            <!-- Qty Controls -->
+                            <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                                <button type="button" onclick="updateQty(@item.ProductId, -1)"
+                                        class="qty-btn btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-minus" style="font-size:.65rem;"></i>
+                                </button>
+                                <span class="fw-bold px-1" id="qty-@item.ProductId">@item.Quantity</span>
+                                <button type="button" onclick="updateQty(@item.ProductId, 1)"
+                                        class="qty-btn btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-plus" style="font-size:.65rem;"></i>
+                                </button>
+                            </div>
+
+                            <!-- Line Total -->
+                            <div class="text-primary fw-bold text-end" style="min-width:90px;" id="line-@item.ProductId">
+                                @item.LineTotal.ToString("N2") @Localizer["ج.م"]
+                            </div>
+
+                            <!-- Remove -->
+                            <a href="@Url.Action("Remove", "Cart", new { productId = item.ProductId })"
+                               class="remove-btn btn btn-outline-danger btn-sm rounded-circle"
+                               style="width:32px; height:32px; padding:0; display:flex; align-items:center; justify-content:center;"
+                               onclick="return confirm('@Localizer["هل تريد حذف هذا المنتج من السلة؟"]')">
+                                <i class="fas fa-times" style="font-size:.7rem;"></i>
+                            </a>
+                        </div>
+                    }
+                </div>
+                <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center px-4 py-3">
+                    <a asp-controller="Catalog" asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4">
+                        <i class="fas fa-@(isRTL ? "arrow-right" : "arrow-left") me-2"></i> @Localizer["متابعة التسوق"]
+                    </a>
+                    <a asp-action="Clear"
+                       class="text-danger text-decoration-none small fw-bold"
+                       onclick="return confirm('@Localizer["هل تريد إفراغ سلة التسوق بالكامل؟"]')">
+                        <i class="fas fa-trash me-1"></i> @Localizer["إفراغ السلة"]
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 summary-card" style="border-radius:16px;">
+                <div class="card-header bg-white border-0 fw-bold fs-6 pt-4 px-4">
+                    <i class="fas fa-receipt me-2 text-primary"></i> @Localizer["ملخص الطلب"]
+                </div>
+                <div class="card-body px-4 pb-4">
+                    <div class="d-flex justify-content-between text-muted mb-2">
+                        <span>@Localizer["عدد المنتجات"]</span>
+                        <span id="total-items">@Model.Sum(x => x.Quantity) @Localizer["منتج"]</span>
+                    </div>
+                    <div class="d-flex justify-content-between text-muted mb-3">
+                        <span>@Localizer["الشحن"]</span>
+                        <span class="text-success fw-bold">@Localizer["مجاني"]</span>
+                    </div>
+                    <hr class="my-2" />
+                    <div class="d-flex justify-content-between fw-bold fs-5 mb-4">
+                        <span>@Localizer["الإجمالي"]</span>
+                        <span class="text-primary" id="grand-total">@total.ToString("N2") @Localizer["ج.م"]</span>
+                    </div>
+                    <a asp-controller="Orders" asp-action="Checkout"
+                       class="btn btn-primary w-100 btn-lg rounded-pill py-3 shadow-sm border-0">
+                        <i class="fas fa-credit-card me-2"></i> @Localizer["إتمام الطلب"]
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+<script>
+    const currency = '@Localizer["ج.م"]';
+    const itemsLabel = '@Localizer["منتج"]';
+
+    function updateQty(productId, delta) {
+        fetch(`/Cart/UpdateQty?productId=${productId}&delta=${delta}`, {
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (!data.success) return;
+
+            if (data.newQty <= 0) {
+                document.getElementById('row-' + productId)?.remove();
+                if (data.totalItems === 0) location.reload(); 
+                return;
+            }
+
+            document.getElementById('qty-' + productId).textContent = data.newQty;
+            document.getElementById('line-' + productId).innerHTML = data.newLineTotal.toLocaleString(undefined, {minimumFractionDigits: 2}) + ' ' + currency;
+            document.getElementById('grand-total').innerHTML = data.grandTotal.toLocaleString(undefined, {minimumFractionDigits: 2}) + ' ' + currency;
+            document.getElementById('total-items').textContent = data.totalItems + ' ' + itemsLabel;
+            
+            // Update Navbar Badge
+            const badge = document.getElementById('cart-count-badge');
+            if (badge) {
+                badge.textContent = data.totalItems;
+                badge.style.display = data.totalItems > 0 ? '' : 'none';
+            }
+        });
+    }
+</script>
+@Html.AntiForgeryToken()
+}

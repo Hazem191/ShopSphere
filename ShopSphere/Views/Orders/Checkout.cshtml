@@ -1,0 +1,125 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model ShopSphere.ViewModels.CheckoutVM
+@{
+    ViewData["Title"] = Localizer["إتمام الطلب"];
+    var isRTL = System.Globalization.CultureInfo.CurrentCulture.Name.StartsWith("ar");
+}
+
+<h2 class="section-title mb-4">
+    <i class="fas fa-credit-card me-2"></i> @Localizer["إتمام الطلب"]
+</h2>
+
+<div class="row g-4 @(isRTL ? "flex-row-reverse" : "")">
+    <!-- Left: Address + Submit -->
+    <div class="col-lg-7">
+        <form asp-action="Checkout" method="post" id="checkoutForm">
+            @Html.AntiForgeryToken()
+
+            <!-- Existing Addresses -->
+            <div class="card shadow-sm border-0 mb-4" style="border-radius:16px;">
+                <div class="card-header bg-white border-0 fw-bold pt-4 px-4">
+                    <i class="fas fa-map-marker-alt me-2 text-primary"></i> @Localizer["عنوان الشحن"]
+                </div>
+                <div class="card-body px-4 pb-4">
+                    @if (Model.UserAddresses != null && Model.UserAddresses.Any())
+                    {
+                        @foreach (var addr in Model.UserAddresses)
+                        {
+                            <div class="form-check mb-3 p-3 border rounded-3 hover-border @(addr.IsDefault ? "border-primary bg-light" : "")">
+                                <input class="form-check-input" type="radio" name="SelectedAddressId"
+                                       id="addr_@addr.Id" value="@addr.Id"
+                                       @(addr.IsDefault ? "checked" : "") />
+                                <label class="form-check-label w-100 ms-2" for="addr_@addr.Id">
+                                    <i class="fas fa-home me-1 text-muted small"></i>
+                                    <strong>@addr.City</strong> — @addr.Street, @addr.Building
+                                    @if (addr.IsDefault)
+                                    {
+                                        <span class="badge bg-primary rounded-pill ms-2 small">@Localizer["الافتراضي"]</span>
+                                    }
+                                </label>
+                            </div>
+                        }
+                        <hr />
+                    }
+
+                    <!-- New Address Form (always visible) -->
+                    <p class="fw-semibold text-muted small mb-3">
+                        <i class="fas fa-plus-circle me-1 text-primary"></i>
+                        @Localizer["إضافة عنوان جديد"]
+                    </p>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">@Localizer["المدينة"] <span class="text-danger">*</span></label>
+                            <input type="text" name="NewAddress.City" class="form-control rounded-pill px-3"
+                                   placeholder="@Localizer["مثال: القاهرة"]" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">@Localizer["الشارع"] <span class="text-danger">*</span></label>
+                            <input type="text" name="NewAddress.Street" class="form-control rounded-pill px-3"
+                                   placeholder="@Localizer["مثال: شارع التحرير"]" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">@Localizer["رقم المبنى"] <span class="text-danger">*</span></label>
+                            <input type="text" name="NewAddress.Building" class="form-control rounded-pill px-3"
+                                   placeholder="@Localizer["مثال: 14 برج النيل"]" />
+                        </div>
+                        <div class="col-md-6 d-flex align-items-end">
+                            <div class="form-check ms-2 mb-1">
+                                <input class="form-check-input" type="checkbox" name="NewAddress.IsDefault" id="isDefaultNew" />
+                                <label class="form-check-label small" for="isDefaultNew">
+                                    @Localizer["حفظ كعنوان افتراضي"]
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill py-3 shadow-sm border-0"
+                    style="background:linear-gradient(135deg,#6c3fc5,#9b59b6);">
+                <i class="fas fa-check-circle me-2"></i> @Localizer["تأكيد الطلب وإتمام الشراء"]
+            </button>
+        </form>
+    </div>
+
+    <!-- Right: Order Summary -->
+    <div class="col-lg-5">
+        <div class="card shadow-sm border-0" style="border-radius:16px; position:sticky; top:80px;">
+            <div class="card-header bg-white border-0 fw-bold fs-6 pt-4 px-4">
+                <i class="fas fa-receipt me-2 text-primary"></i> @Localizer["ملخص طلبك"]
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush px-0">
+                    @if (Model.CartItems != null)
+                    {
+                        @foreach (var item in Model.CartItems)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center py-3 px-4">
+                                <div class="d-flex align-items-center gap-3">
+                                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                    {
+                                        <img src="@item.ImageUrl" style="width:44px; height:44px; object-fit:cover; border-radius:10px;" />
+                                    }
+                                    <div>
+                                        <div class="fw-semibold small">@item.ProductName</div>
+                                        <small class="text-muted">@item.Price.ToString("N2") @Localizer["ج.م"] × @item.Quantity</small>
+                                    </div>
+                                </div>
+                                <span class="fw-bold text-primary">@item.LineTotal.ToString("N2") @Localizer["ج.م"]</span>
+                            </li>
+                        }
+                    }
+                    <li class="list-group-item d-flex justify-content-between py-3 px-4 border-top">
+                        <span class="text-muted">@Localizer["الشحن"]</span>
+                        <span class="text-success fw-bold">@Localizer["مجاني"]</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between fw-bold fs-5 py-3 px-4">
+                        <span>@Localizer["الإجمالي"]</span>
+                        <span style="color:#6c3fc5;">@Model.TotalAmount.ToString("N2") @Localizer["ج.م"]</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

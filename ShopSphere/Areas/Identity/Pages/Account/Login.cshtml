@@ -1,0 +1,99 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model LoginModel
+@{
+    ViewData["Title"] = Localizer["تسجيل الدخول"];
+    var isRTL = System.Globalization.CultureInfo.CurrentCulture.Name.StartsWith("ar");
+}
+
+<div class="row justify-content-center mt-5 mb-5">
+    <div class="col-md-5">
+        <div class="card shadow-lg border-0" style="border-radius: 20px;">
+            <div class="card-body p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <div class="display-6 fw-bold text-primary mb-2">
+                        <i class="fas fa-sign-in-alt me-2"></i> ShopSphere
+                    </div>
+                    <p class="text-muted small">@Localizer["مرحباً بعودتك! يرجى تسجيل الدخول للمتابعة"]</p>
+                </div>
+
+                <form id="account" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger small mb-3" role="alert"></div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.Email" class="form-control rounded-pill" autocomplete="username" aria-required="true" placeholder=" " />
+                        <label asp-for="Input.Email">@Localizer["البريد الإلكتروني"]</label>
+                        <span asp-validation-for="Input.Email" class="text-danger small px-3"></span>
+                    </div>
+
+                    <div class="form-floating mb-3 position-relative">
+                        <input asp-for="Input.Password" id="passwordInput" class="form-control rounded-pill @(isRTL ? "ps-5" : "pe-5")" autocomplete="current-password" aria-required="true" placeholder=" " />
+                        <label asp-for="Input.Password">@Localizer["كلمة المرور"]</label>
+                        <i class="far fa-eye position-absolute @(isRTL ? "start-0 ms-4" : "end-0 me-4")" id="togglePassword" style="top: 50%; transform: translateY(-50%); cursor: pointer; z-index: 10; color: #6c757d;"></i>
+                        <span asp-validation-for="Input.Password" class="text-danger small px-3"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-4 px-2">
+                        <div class="form-check m-0 d-flex align-items-center">
+                            <input class="form-check-input @(isRTL ? "ms-2" : "me-2")" asp-for="Input.RememberMe" id="rememberMeCheck" />
+                            <label class="form-check-label text-muted small" for="rememberMeCheck">
+                                @Localizer["تذكرني"]
+                            </label>
+                        </div>
+                        <a id="forgot-password" asp-page="./ForgotPassword" class="text-primary small text-decoration-none">@Localizer["نسيت كلمة المرور؟"]</a>
+                    </div>
+
+                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary rounded-pill py-3 fw-bold mb-3 shadow-sm border-0">
+                        @Localizer["تسجيل الدخول"]
+                    </button>
+
+                    <div class="text-center">
+                        <p class="mb-0 text-muted small">@Localizer["ليس لديك حساب؟"] <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="text-primary fw-bold text-decoration-none">@Localizer["إنشاء حساب جديد"]</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="mt-4 text-center">
+            <section>
+                <p class="text-muted small mb-2">@Localizer["تسجيل الدخول باستخدام خدمات أخرى"]</p>
+                <hr class="w-25 mx-auto mb-3">
+                @{
+                    if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                    {
+                        <div>
+                            <p class="text-muted x-small">@Localizer["لا توجد خدمات خارجية مفعلة حالياً."]</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                            <div class="d-flex justify-content-center gap-2">
+                                @foreach (var provider in Model.ExternalLogins!)
+                                {
+                                    <button type="submit" class="btn btn-outline-secondary rounded-pill px-4" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                }
+                            </div>
+                        </form>
+                    }
+                }
+            </section>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#passwordInput');
+
+        togglePassword.addEventListener('click', function (e) {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+            this.classList.toggle('fa-eye');
+        });
+    </script>
+}

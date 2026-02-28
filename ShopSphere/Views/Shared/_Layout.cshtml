@@ -1,0 +1,392 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    var isRTL = System.Globalization.CultureInfo.CurrentCulture.Name.StartsWith("ar");
+}
+<!DOCTYPE html>
+<html lang="@(isRTL ? "ar" : "en")" dir="@(isRTL ? "rtl" : "ltr")">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ShopSphere</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1 0 auto; /* Allow main to grow but not shrink below content */
+        }
+
+        .navbar {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,.08);
+            transition: box-shadow .3s, background .3s;
+        }
+        /* ... rest of existing styles ... */
+
+        .navbar.scrolled {
+            box-shadow: 0 4px 24px rgba(108,63,197,.15);
+            background: rgba(255,255,255,.97) !important;
+            backdrop-filter: blur(8px);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #6c3fc5 !important;
+        }
+
+        .nav-link {
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: #6c3fc5;
+            border-color: #6c3fc5;
+        }
+
+        .btn-primary:hover {
+            background: #5a33a8;
+            border-color: #5a33a8;
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0 2px 12px rgba(0,0,0,.07);
+            border-radius: 12px;
+        }
+
+        .section-title {
+            border-right: @(isRTL ? "4px solid #6c3fc5" : "none");
+            border-left: @(isRTL ? "none" : "4px solid #6c3fc5");
+            padding-right: @(isRTL ? "12px" : "0");
+            padding-left: @(isRTL ? "0" : "12px");
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        /* RTL Overrides for Overlapping Fix */
+        [dir="rtl"] .ms-auto { margin-right: auto !important; margin-left: unset !important; }
+        [dir="rtl"] .me-auto { margin-left: auto !important; margin-right: unset !important; }
+        [dir="rtl"] .ms-3 { margin-right: 1rem !important; margin-left: unset !important; }
+        [dir="rtl"] .me-3 { margin-left: 1rem !important; margin-right: unset !important; }
+        [dir="rtl"] .me-1, [dir="rtl"] .me-2 { margin-left: .5rem !important; margin-right: unset !important; }
+
+        .alert-success,
+        .alert-danger {
+            border-radius: 10px;
+        }
+    </style>
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+
+<body>
+
+    <header>
+        @{
+            var cartJson = Context.Session.GetString("Cart");
+            int cartCount = 0;
+            if (!string.IsNullOrEmpty(cartJson))
+            {
+                var tmpCart = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ShopSphere.ViewModels.CartItemVM>>(cartJson);
+                cartCount = tmpCart?.Sum(x => x.Quantity) ?? 0;
+            }
+            var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
+            var isRTL = currentCulture.StartsWith("ar");
+        }
+        <nav class="navbar navbar-expand-lg fixed-top modern-navbar border-bottom" id="mainNavbar">
+            <div class="container">
+                <!-- 1. Brand -->
+                <a class="navbar-brand d-flex align-items-center fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
+                    <div class="logo-box @(isRTL ? "ms-2" : "me-2")">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <span>ShopSphere</span>
+                </a>
+
+                <!-- 2. Mobile Actions -->
+                <div class="d-flex d-lg-none align-items-center gap-2 order-lg-last">
+                    @if (!User.IsInRole("Admin"))
+                    {
+                        <a class="nav-link position-relative cart-modern-link px-2" asp-area="" asp-controller="Cart" asp-action="Index">
+                            <i class="fas fa-shopping-cart text-primary"></i>
+                            @if (cartCount > 0)
+                            {
+                                <span class="badge rounded-pill bg-danger border-2 border-white small-badge">@cartCount</span>
+                            }
+                        </a>
+                    }
+                    <button class="navbar-toggler border-0 shadow-none p-2" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavContent">
+                        <i class="fas fa-bars-staggered toggler-icon"></i>
+                    </button>
+                </div>
+
+                <!-- 3. Navigation Content -->
+                <div class="collapse navbar-collapse" id="mainNavContent">
+                    <!-- Links Group - 'me-auto' pushes next group to the end -->
+                    <ul class="navbar-nav me-auto mb-3 mb-lg-0 align-items-center">
+                        <li class="nav-item">
+                            <a class="nav-link px-3 @(Context.Request.Path == "/" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">@Localizer["الرئيسية"]</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3 @(Context.Request.Path.StartsWithSegments("/Catalog") ? "active" : "")" asp-area="" asp-controller="Catalog" asp-action="Index">@Localizer["المنتجات"]</a>
+                        </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-primary fw-bold px-3 d-flex align-items-center no-caret" href="#" id="adminDropdown" data-bs-toggle="dropdown">
+                                    <i class="fas fa-toolbox me-2 opacity-75"></i> 
+                                    @Localizer["لوحة التحكم"]
+                                    <i class="fas fa-chevron-down small opacity-50 ms-2"></i>
+                                </a>
+                                <ul class="dropdown-menu border-0 shadow-lg mt-lg-2 p-2">
+                                    <li><a class="dropdown-item rounded-3 py-2 text-@(isRTL ? "end" : "start")" asp-area="Admin" asp-controller="Products" asp-action="Index"><i class="fas fa-boxes @(isRTL ? "ms-2" : "me-2") text-muted"></i> @Localizer["المنتجات"]</a></li>
+                                    <li><a class="dropdown-item rounded-3 py-2 text-@(isRTL ? "end" : "start")" asp-area="Admin" asp-controller="Categories" asp-action="Index"><i class="fas fa-tags @(isRTL ? "ms-2" : "me-2") text-muted"></i> @Localizer["الفئات"]</a></li>
+                                    <li><a class="dropdown-item rounded-3 py-2 text-@(isRTL ? "end" : "start")" asp-area="Admin" asp-controller="AdminOrders" asp-action="Index"><i class="fas fa-clipboard-list @(isRTL ? "ms-2" : "me-2") text-muted"></i> @Localizer["الطلبات"]</a></li>
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+                    
+                    <!-- Actions Group -->
+                    <ul class="navbar-nav align-items-center gap-2 actions-group border-lg-start ps-lg-4 ms-lg-2">
+                        <!-- Desktop Cart -->
+                        @if (!User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item d-none d-lg-block">
+                                <a class="nav-link position-relative cart-modern-link px-2" asp-area="" asp-controller="Cart" asp-action="Index">
+                                    <i class="fas fa-shopping-cart text-primary"></i>
+                                    @if (cartCount > 0)
+                                    {
+                                        <span class="badge rounded-pill bg-danger border-2 border-white small-badge">@cartCount</span>
+                                    }
+                                </a>
+                            </li>
+                        }
+
+                        <!-- Lang -->
+                        <li class="nav-item">
+                             <form asp-area="" asp-controller="Language" asp-action="SetLanguage" method="post" class="m-0">
+                                <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                                <div class="lang-pill-wrap d-flex align-items-center">
+                                    <i class="fas fa-globe small text-muted @(isRTL ? "ms-1" : "me-1")"></i>
+                                    <select name="culture" onchange="this.form.submit()" class="form-select border-0 bg-transparent shadow-none py-1 @(isRTL ? "ps-5 pe-1" : "ps-1 pe-5")" 
+                                            style="cursor:pointer; font-weight:600; font-size:0.85rem; -webkit-appearance: none; -moz-appearance: none; appearance: none; 
+                                                   background: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 fill=%22%2364748b%22 viewBox=%220 0 16 16%22><path fill-rule=%22evenodd%22 d=%22M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z%22/></svg>') no-repeat @(isRTL ? "left" : "right") 0.5rem center;">
+                                        <option value="ar-EG" selected='@(currentCulture == "ar-EG")'>العربية</option>
+                                        <option value="en-US" selected='@(currentCulture == "en-US")'>English</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </li>
+
+                        <!-- User Session -->
+                        <partial name="_LoginPartial" />
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="nav-spacer"></div>
+    </header>
+
+    <main class="flex-grow-1">
+        <div class="container py-4">
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-modern alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle fs-4 me-3"></i>
+                    <div>@TempData["Success"]</div>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-modern alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-triangle fs-4 me-3"></i>
+                    <div>@TempData["Error"]</div>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            @RenderBody()
+        </div>
+    </main>
+    
+
+    <!-- PREMIUM DARK MINIMAL FOOTER -->
+    <footer class="premium-dark-footer mt-auto flex-shrink-0">
+        <div class="container py-4">
+            <!-- Line 1: Brand & Copyright -->
+            <div class="row align-items-center mb-3">
+                <div class="col-md-12 text-center">
+                    <div class="footer-brand-wrap mb-2">
+                        <span class="fw-bold text-white fs-5">ShopSphere<span class="text-primary">.</span></span>
+                    </div>
+                    <p class="text-muted small mb-0">
+                        &copy; @DateTime.Now.Year @Localizer["كل الحقوق محفوظة."] 
+                        <span class="mx-2 opacity-25">|</span> 
+                        @Localizer["الجودة التي تستحقها"]
+                    </p>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <div class="footer-divider mb-3"></div>
+
+            <!-- Line 2: Developer & Socials -->
+            <div class="row align-items-center g-3">
+                <div class="col-md-6 text-center text-md-@(isRTL ? "end" : "start")">
+                    <span class="small text-muted">@Localizer["صُنع بواسطة"]:</span>
+                    <a href="#" class="developer-link fw-bold text-white text-decoration-none ms-1">Hazem Aldriny</a>
+                </div>
+                <div class="col-md-6 text-center text-md-@(isRTL ? "start" : "end")">
+                    <div class="footer-social-pill d-inline-flex gap-2">
+                        <a href="#" class="dark-social-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="dark-social-link" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="dark-social-link" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="mailto:support@shopsphere.com" class="dark-social-link" title="Email"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            /* Nav Refinements */
+            .modern-navbar {
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(15px);
+                transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                padding: 0.7rem 0;
+                z-index: 1050;
+            }
+            .modern-navbar.scrolled {
+                padding: 0.4rem 0;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+            }
+            .nav-spacer { height: 75px; }
+            .logo-box { width: 40px; height: 40px; background: #6c3fc5; color: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+            .navbar-brand { font-size: 1.4rem; color: #1e293b !important; }
+            
+            .nav-link { 
+                color: #475569 !important; 
+                font-weight: 600; 
+                font-size: 0.92rem; 
+                position: relative;
+                transition: 0.3s;
+            }
+            .nav-link:hover, .nav-link.active { color: #6c3fc5 !important; }
+            .nav-link.active::after {
+                content: '';
+                position: absolute;
+                bottom: -5px;
+                left: 1rem;
+                right: 1rem;
+                height: 3px;
+                background: #6c3fc5;
+                border-radius: 10px;
+            }
+            .no-caret::after { display: none !important; }
+            
+            @@media (max-width: 991.98px) {
+                .nav-link.active::after { display: none; }
+                .nav-link.active { background: rgba(108,63,197,0.05); border-radius: 8px; }
+                .navbar-nav { padding: 1rem 0; width: 100%; align-items: flex-start !important; }
+            }
+
+            .cart-modern-link { font-size: 1.25rem; color: #1e293b !important; }
+            .small-badge { position: absolute; top: -2px; @(isRTL ? "left: -5px" : "right: -5px"); font-size: 0.6rem; padding: 0.35em 0.5em; }
+            
+            .lang-pill-wrap { background: #f1f5f9; border-radius: 50px; padding: 2px 12px; border: 1px solid #e2e8f0; }
+            .toggler-icon { color: #6c3fc5; font-size: 1.3rem; }
+
+            .actions-group {
+                border-left: 1px solid #e2e8f0;
+            }
+            [dir="rtl"] .actions-group { border-left: 0; border-right: 1px solid #e2e8f0; }
+
+            @@media (max-width: 991.98px) {
+                .actions-group { border: 0 !important; padding: 1rem 0 0 0 !important; margin: 0 !important; width: 100%; border-top: 1px solid #eee !important; align-items: flex-start !important; flex-direction: column !important; }
+                .login-partial-wrap { width: 100%; }
+            }
+
+            /* Premium Dark Footer Styles */
+            .premium-dark-footer { 
+                background: #1a2234; /* Richer Navy Dark */
+                color: #e2e8f0; 
+                border-top: 1px solid rgba(255,255,255,0.08); 
+                position: relative;
+                overflow: hidden;
+            }
+            .premium-dark-footer::before {
+                content: '';
+                position: absolute;
+                top: 0; left: 0; right: 0; height: 1px;
+                background: linear-gradient(90deg, transparent, rgba(108,63,197,0.3), transparent);
+            }
+            .footer-divider { 
+                height: 1px; 
+                background: linear-gradient(to right, transparent, rgba(255,255,255,0.08), transparent); 
+                width: 100%; 
+            }
+            .developer-link { color: #f8f9fa !important; transition: 0.3s; }
+            .developer-link:hover { color: #a78bfa !important; text-shadow: 0 0 10px rgba(167,139,250,0.5); }
+            .dark-social-link { 
+                width: 36px; height: 36px; 
+                background: rgba(255,255,255,0.06); 
+                color: #cbd5e1; 
+                border-radius: 12px; 
+                display: flex; align-items: center; justify-content: center; 
+                text-decoration: none; transition: all 0.3s ease; 
+                border: 1px solid rgba(255,255,255,0.1); 
+            }
+            .dark-social-link:hover { 
+                background: #6c3fc5; 
+                color: #fff; 
+                transform: translateY(-4px) scale(1.1); 
+                border-color: #6c3fc5; 
+                box-shadow: 0 10px 20px rgba(108,63,197,0.4); 
+            }
+            .footer-brand-wrap span { 
+                letter-spacing: 0.5px; 
+                text-shadow: 0 0 30px rgba(108,63,197,0.3); 
+            }
+            .premium-dark-footer .text-muted { color: #94a3b8 !important; }
+            .premium-dark-footer p.small { color: #cbd5e1 !important; }
+
+            /* Alerts */
+            .alert-modern { border: 0; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); padding: 1rem 1.5rem; }
+        </style>
+    </footer>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        window.addEventListener('scroll', function () {
+            const nav = document.getElementById('mainNavbar');
+            if (nav) nav.classList.toggle('scrolled', window.scrollY > 20);
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

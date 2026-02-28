@@ -1,0 +1,79 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model RegisterModel
+@{
+    ViewData["Title"] = Localizer["إنشاء حساب جديد"];
+    var isRTL = System.Globalization.CultureInfo.CurrentCulture.Name.StartsWith("ar");
+}
+
+<div class="row justify-content-center mt-5 mb-5">
+    <div class="col-md-5">
+        <div class="card shadow-lg border-0" style="border-radius: 20px;">
+            <div class="card-body p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <div class="display-6 fw-bold text-primary mb-2">
+                        <i class="fas fa-user-plus me-2"></i> ShopSphere
+                    </div>
+                    <p class="text-muted small">@Localizer["انضم إلينا واستمتع بتجربة تسوق فريدة"]</p>
+                </div>
+
+                <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger small mb-3" role="alert"></div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.FullName" class="form-control rounded-pill" autocomplete="name" aria-required="true" placeholder=" " />
+                        <label asp-for="Input.FullName">@Localizer["الاسم بالكامل"]</label>
+                        <span asp-validation-for="Input.FullName" class="text-danger small px-3"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.Email" class="form-control rounded-pill" autocomplete="username" aria-required="true" placeholder=" " />
+                        <label asp-for="Input.Email">@Localizer["البريد الإلكتروني"]</label>
+                        <span asp-validation-for="Input.Email" class="text-danger small px-3"></span>
+                    </div>
+
+                    <div class="form-floating mb-3 position-relative">
+                        <input asp-for="Input.Password" id="passwordInput" class="form-control rounded-pill @(isRTL ? "ps-5" : "pe-5")" autocomplete="new-password" aria-required="true" placeholder=" " />
+                        <label asp-for="Input.Password">@Localizer["كلمة المرور"]</label>
+                        <i class="far fa-eye position-absolute @(isRTL ? "start-0 ms-4" : "end-0 me-4")" id="togglePassword" style="top: 50%; transform: translateY(-50%); cursor: pointer; z-index: 10; color: #6c757d;"></i>
+                        <span asp-validation-for="Input.Password" class="text-danger small px-3"></span>
+                    </div>
+
+                    <div class="form-floating mb-4 position-relative">
+                        <input asp-for="Input.ConfirmPassword" id="confirmPasswordInput" class="form-control rounded-pill @(isRTL ? "ps-5" : "pe-5")" autocomplete="new-password" aria-required="true" placeholder=" " />
+                        <label asp-for="Input.ConfirmPassword">@Localizer["تأكيد كلمة المرور"]</label>
+                        <i class="far fa-eye position-absolute @(isRTL ? "start-0 ms-4" : "end-0 me-4")" id="toggleConfirmPassword" style="top: 50%; transform: translateY(-50%); cursor: pointer; z-index: 10; color: #6c757d;"></i>
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger small px-3"></span>
+                    </div>
+
+                    <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary rounded-pill py-3 fw-bold mb-3 shadow-sm border-0">
+                        @Localizer["إنشاء الحساب"]
+                    </button>
+                    
+                    <div class="text-center">
+                        <p class="mb-0 text-muted small">@Localizer["لديك حساب بالفعل؟"] <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl" class="text-primary fw-bold text-decoration-none">@Localizer["تسجيل الدخول"]</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function setupToggle(toggleId, inputId) {
+            const toggle = document.querySelector(toggleId);
+            const input = document.querySelector(inputId);
+            toggle.addEventListener('click', function() {
+                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                input.setAttribute('type', type);
+                this.classList.toggle('fa-eye-slash');
+                this.classList.toggle('fa-eye');
+            });
+        }
+        setupToggle('#togglePassword', '#passwordInput');
+        setupToggle('#toggleConfirmPassword', '#confirmPasswordInput');
+    </script>
+}
