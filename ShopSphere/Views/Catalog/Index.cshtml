@@ -9,13 +9,13 @@
 
 @section Styles {
 <style>
-    .product-card { transition: all .4s cubic-bezier(0.165, 0.84, 0.44, 1); border: 1px solid rgba(0,0,0,0.05) !important; overflow: hidden; }
-    .product-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(108,63,197,0.1) !important; border-color: rgba(108,63,197,0.2) !important; }
-    .product-img-wrapper { position: relative; height: 230px; background: #fafafa; overflow: hidden; }
+    .product-card { transition: all .4s cubic-bezier(0.165, 0.84, 0.44, 1); border: 1px solid var(--border-color) !important; overflow: hidden; background: var(--card-bg); }
+    .product-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-md) !important; border-color: var(--primary-color) !important; }
+    .product-img-wrapper { position: relative; height: 230px; background: var(--bg-color); overflow: hidden; }
     .product-img-wrapper img { transition: transform .6s ease; width: 100%; height: 100%; object-fit: cover; }
     .product-card:hover .product-img-wrapper img { transform: scale(1.1); }
     
-    .price-tag { color: #6c3fc5; font-weight: 800; font-size: 1.25rem; }
+    .price-tag { color: var(--primary-color); font-weight: 800; font-size: 1.25rem; }
     .category-sidebar { 
         position: sticky; 
         top: 100px; 
@@ -27,10 +27,14 @@
     /* Hide scrollbar for IE, Edge and Firefox */
     .category-sidebar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    .filter-card { border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border-radius: 20px; }
+    .filter-card { border: none; box-shadow: var(--shadow-sm); border-radius: 20px; background: var(--card-bg); }
     
-    .list-group-item.active { background-color: #6c3fc5 !important; border-color: #6c3fc5 !important; }
-    .btn-stepper { width: 32px; height: 32px; border-radius: 50% !important; display: flex; align-items: center; justify-content: center; padding: 0; }
+    .list-group-item.active { background-color: var(--primary-color) !important; border-color: var(--primary-color) !important; }
+    .list-group-item { background-color: transparent !important; color: var(--text-color) !important; border-color: var(--border-color) !important; }
+    .list-group-item:hover { background-color: var(--bg-color) !important; }
+    
+    .btn-stepper { width: 32px; height: 32px; border-radius: 50% !important; display: flex; align-items: center; justify-content: center; padding: 0; background: var(--card-bg) !important; color: var(--text-color) !important; border: 1px solid var(--border-color) !important; }
+    .btn-stepper:hover { background: var(--primary-color) !important; color: #fff !important; }
 
     /* Fix select arrow overlap in RTL */
     [dir="rtl"] .form-select {
@@ -281,11 +285,11 @@
     }
 
     function updateBadge(count) {
-        const badge = document.getElementById('cart-count-badge');
-        if (badge) {
+        const badges = document.querySelectorAll('.cart-count-badge');
+        badges.forEach(badge => {
             badge.innerText = count;
             badge.style.display = count > 0 ? 'inline-block' : 'none';
-        }
+        });
     }
 
     function showToast(msg) {

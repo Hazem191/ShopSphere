@@ -150,15 +150,18 @@ function addToCart(btn, productId) {
             stepper.classList.remove('d-none');
             document.getElementById('product-qty').textContent = '1';
             
-            // Update Navbar Badge
-            const badge = document.getElementById('cart-count-badge');
-            if (badge) {
-                badge.textContent = data.totalItems;
-                badge.style.display = '';
-            }
+            updateBadge(data.totalItems);
         }
         btn.disabled = false;
         btn.innerHTML = '<i class="fas fa-cart-plus me-2"></i> @Localizer["أضف إلى السلة"]';
+    });
+}
+
+function updateBadge(count) {
+    const badges = document.querySelectorAll('.cart-count-badge');
+    badges.forEach(badge => {
+        badge.innerText = count;
+        badge.style.display = count > 0 ? '' : 'none';
     });
 }
 
@@ -178,12 +181,7 @@ function changeQty(productId, delta) {
                 document.getElementById('product-qty').textContent = data.newQty;
             }
             
-            // Update Navbar Badge
-            const badge = document.getElementById('cart-count-badge');
-            if (badge) {
-                badge.textContent = data.totalItems;
-                badge.style.display = data.totalItems > 0 ? '' : 'none';
-            }
+            updateBadge(data.totalItems);
         }
     });
 }

@@ -58,37 +58,21 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="الرئيسية" xml:space="preserve">
-    <value>Home</value>
-  </data>
-  <data name="المنتجات" xml:space="preserve">
-    <value>Products</value>
-  </data>
-  <data name="الفئات" xml:space="preserve">
-    <value>Categories</value>
-  </data>
-  <data name="طلبات العملاء" xml:space="preserve">
-    <value>Customer Orders</value>
-  </data>
-  <data name="لوحة التحكم" xml:space="preserve">
-    <value>Dashboard</value>
-  </data>
-  <data name="كل الحقوق محفوظة." xml:space="preserve">
-    <value>All Rights Reserved.</value>
-  </data>
-  <data name="الجودة التي تستحقها" xml:space="preserve">
-    <value>Quality you deserve</value>
-  </data>
-  <data name="صُنع بواسطة" xml:space="preserve">
-    <value>Developed by</value>
-  </data>
-  <data name="حسابي" xml:space="preserve">
-    <value>My Account</value>
-  </data>
-  <data name="الطلبات" xml:space="preserve">
-    <value>Orders Management</value>
-  </data>
-  <data name="تغيير السمة" xml:space="preserve">
-    <value>Toggle Theme</value>
-  </data>
+  <data name="إتمام الطلب" xml:space="preserve"><value>Checkout</value></data>
+  <data name="عنوان الشحن" xml:space="preserve"><value>Shipping Address</value></data>
+  <data name="الافتراضي" xml:space="preserve"><value>Default</value></data>
+  <data name="إضافة عنوان جديد" xml:space="preserve"><value>Add New Address</value></data>
+  <data name="المدينة" xml:space="preserve"><value>City</value></data>
+  <data name="الشارع" xml:space="preserve"><value>Street</value></data>
+  <data name="رقم المبنى" xml:space="preserve"><value>Building Number</value></data>
+  <data name="حفظ كعنوان افتراضي" xml:space="preserve"><value>Save as Default Address</value></data>
+  <data name="تأكيد الطلب وإتمام الشراء" xml:space="preserve"><value>Confirm Order &amp; Purchase</value></data>
+  <data name="ملخص طلبك" xml:space="preserve"><value>Order Summary</value></data>
+  <data name="ج.م" xml:space="preserve"><value>EGP</value></data>
+  <data name="الشحن" xml:space="preserve"><value>Shipping</value></data>
+  <data name="مجاني" xml:space="preserve"><value>Free</value></data>
+  <data name="الإجمالي" xml:space="preserve"><value>Total</value></data>
+  <data name="مثال: القاهرة" xml:space="preserve"><value>e.g. Cairo</value></data>
+  <data name="مثال: شارع التحرير" xml:space="preserve"><value>e.g. Tahrir St.</value></data>
+  <data name="مثال: 14 برج النيل" xml:space="preserve"><value>e.g. 14 Nile Tower</value></data>
 </root>

@@ -18,7 +18,7 @@
 
             <!-- Existing Addresses -->
             <div class="card shadow-sm border-0 mb-4" style="border-radius:16px;">
-                <div class="card-header bg-white border-0 fw-bold pt-4 px-4">
+                <div class="card-header bg-transparent border-0 fw-bold pt-4 px-4">
                     <i class="fas fa-map-marker-alt me-2 text-primary"></i> @Localizer["عنوان الشحن"]
                 </div>
                 <div class="card-body px-4 pb-4">
@@ -76,8 +76,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill py-3 shadow-sm border-0"
-                    style="background:linear-gradient(135deg,#6c3fc5,#9b59b6);">
+            <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill py-3 shadow-sm border-0">
                 <i class="fas fa-check-circle me-2"></i> @Localizer["تأكيد الطلب وإتمام الشراء"]
             </button>
         </form>
@@ -86,7 +85,7 @@
     <!-- Right: Order Summary -->
     <div class="col-lg-5">
         <div class="card shadow-sm border-0" style="border-radius:16px; position:sticky; top:80px;">
-            <div class="card-header bg-white border-0 fw-bold fs-6 pt-4 px-4">
+            <div class="card-header bg-transparent border-0 fw-bold fs-6 pt-4 px-4">
                 <i class="fas fa-receipt me-2 text-primary"></i> @Localizer["ملخص طلبك"]
             </div>
             <div class="card-body p-0">
@@ -116,7 +115,7 @@
                     </li>
                     <li class="list-group-item d-flex justify-content-between fw-bold fs-5 py-3 px-4">
                         <span>@Localizer["الإجمالي"]</span>
-                        <span style="color:#6c3fc5;">@Model.TotalAmount.ToString("N2") @Localizer["ج.م"]</span>
+                        <span style="color:var(--primary-color);">@Model.TotalAmount.ToString("N2") @Localizer["ج.م"]</span>
                     </li>
                 </ul>
             </div>

@@ -81,4 +81,10 @@
   <data name="تمت الإضافة!" xml:space="preserve"><value>Added!</value></data>
   <data name="أضف" xml:space="preserve"><value>Add to Cart</value></data>
   <data name="تمت إضافة {0} إلى السلة" xml:space="preserve"><value>"{0}" added to cart!</value></data>
+  <data name="الإجمالي النهائي" xml:space="preserve"><value>Grand Total</value></data>
+  <data name="إتمام الدفع" xml:space="preserve"><value>Proceed to Checkout</value></data>
+  <data name="دفع آمن 100%" xml:space="preserve"><value>100% Secure Payment</value></data>
+  <data name="العودة للتسوق" xml:space="preserve"><value>Back to Shopping</value></data>
+  <data name="يبدو أنك لم تضف أي منتج بعد، ابدأ التسوق الآن!" xml:space="preserve"><value>It looks like you haven't added any products yet. Start shopping now!</value></data>
+  <data name="حذف؟" xml:space="preserve"><value>Remove?</value></data>
 </root>
