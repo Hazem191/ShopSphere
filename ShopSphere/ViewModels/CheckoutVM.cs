@@ -20,7 +20,6 @@ namespace ShopSphere.ViewModels
 
         public decimal TotalAmount { get; set; }
 
-        // Inline new address
         public NewAddressVM NewAddress { get; set; }
     }
 }

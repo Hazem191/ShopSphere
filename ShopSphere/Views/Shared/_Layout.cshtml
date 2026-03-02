@@ -263,7 +263,6 @@
         }
         <nav class="navbar navbar-expand-lg fixed-top modern-navbar border-bottom" id="mainNavbar">
             <div class="container">
-                <!-- 1. Brand -->
                 <a class="navbar-brand d-flex align-items-center fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
                     <div class="logo-box @(isRTL ? "ms-2" : "me-2")">
                         <i class="fas fa-shopping-bag"></i>
@@ -271,7 +270,6 @@
                     <span>ShopSphere</span>
                 </a>
 
-                <!-- 2. Mobile Actions -->
                 <div class="d-flex d-lg-none align-items-center gap-2 order-lg-last">
                     @if (!User.IsInRole("Admin"))
                     {
@@ -286,9 +284,7 @@
                     </button>
                 </div>
 
-                <!-- 3. Navigation Content -->
                 <div class="collapse navbar-collapse" id="mainNavContent">
-                    <!-- Links Group - 'me-auto' pushes next group to the end -->
                     <ul class="navbar-nav me-auto mb-3 mb-lg-0 align-items-center">
                         <li class="nav-item">
                             <a class="nav-link px-3 @(Context.Request.Path == "/" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">@Localizer["الرئيسية"]</a>
@@ -319,7 +315,6 @@
                         }
                     </ul>
                     
-                    <!-- Actions Group -->
                     <ul class="navbar-nav align-items-center gap-2 actions-group border-lg-start ps-lg-4 ms-lg-2">
                         <li class="nav-item d-flex align-items-center">
                             <button id="themeToggle" class="theme-toggle-btn @(isRTL ? "ms-2" : "me-2")" title="@Localizer["تغيير السمة"]">
@@ -328,7 +323,6 @@
                             </button>
                         </li>
 
-                        <!-- Desktop Cart -->
                         @if (!User.IsInRole("Admin"))
                         {
                             <li class="nav-item d-none d-lg-block">
@@ -340,7 +334,6 @@
                             </li>
                         }
 
-                        <!-- Lang -->
                         <li class="nav-item">
                              <form asp-area="" asp-controller="Language" asp-action="SetLanguage" method="post" class="m-0">
                                 <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
@@ -356,7 +349,6 @@
                             </form>
                         </li>
 
-                        <!-- User Session -->
                         <partial name="_LoginPartial" />
                     </ul>
                 </div>
@@ -364,7 +356,6 @@
         </nav>
         <div class="nav-spacer"></div>
         <script>
-            // Theme initialization check to prevent flicker
             (function () {
                 const theme = localStorage.getItem('theme') || 'light';
                 document.documentElement.setAttribute('data-theme', theme);
@@ -372,7 +363,6 @@
         </script>
     </header>
 
-    <!-- Global Toast Container -->
     <div class="toast-container position-fixed bottom-0 @(isRTL ? "start-0" : "end-0") p-3" style="z-index: 2000;">
         <div id="appToast" class="toast border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true" style="border-radius: 12px; background: rgba(var(--nav-bg), 0.9); backdrop-filter: blur(10px);">
             <div class="d-flex align-items-center py-3 px-4 rounded-3 border-start border-4" id="toast-border">
@@ -412,10 +402,8 @@
     </main>
     
 
-    <!-- PREMIUM DARK MINIMAL FOOTER -->
     <footer class="premium-dark-footer mt-auto flex-shrink-0">
         <div class="container py-4">
-            <!-- Line 1: Brand & Copyright -->
             <div class="row align-items-center mb-3">
                 <div class="col-md-12 text-center">
                     <div class="footer-brand-wrap mb-2">
@@ -429,10 +417,8 @@
                 </div>
             </div>
 
-            <!-- Divider -->
             <div class="footer-divider mb-3"></div>
 
-            <!-- Line 2: Developer & Socials -->
             <div class="row align-items-center g-3">
                 <div class="col-md-6 text-center text-md-@(isRTL ? "end" : "start")">
                     <span class="small text-muted">@Localizer["صُنع بواسطة"]:</span>
@@ -461,7 +447,6 @@
         </div>
 
         <style>
-            /* Nav Refinements */
             .modern-navbar {
                 background: var(--nav-bg) !important;
                 backdrop-filter: blur(15px);
@@ -518,7 +503,6 @@
                 .login-partial-wrap { width: 100%; }
             }
 
-            /* Premium Dark Footer Styles */
             .premium-dark-footer { 
                 background: var(--footer-bg) !important; 
                 color: #e2e8f0; 
@@ -562,7 +546,6 @@
             .premium-dark-footer .text-muted { color: #94a3b8 !important; }
             .premium-dark-footer p.small { color: #cbd5e1 !important; }
 
-            /* Alerts */
             .alert-modern { border: 0; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); padding: 1rem 1.5rem; }
         </style>
     </footer>
@@ -577,7 +560,6 @@
             if (nav) nav.classList.toggle('scrolled', window.scrollY > 20);
         });
 
-        // Theme Toggle Script
         const themeBtn = document.getElementById('themeToggle');
         const sunIcon = themeBtn.querySelector('.fa-sun');
         const moonIcon = themeBtn.querySelector('.fa-moon');
@@ -592,7 +574,6 @@
             }
         }
 
-        // Initialize icons
         updateIcons(localStorage.getItem('theme') || 'light');
 
         themeBtn.addEventListener('click', () => {
@@ -604,7 +585,6 @@
             updateIcons(newTheme);
         });
 
-        // Global Toast Function
         window.showAppToast = function(message, type = 'success') {
             const toast = document.getElementById('appToast');
             const border = document.getElementById('toast-border');
@@ -616,7 +596,6 @@
 
             msg.innerText = message;
             
-            // Reset classes
             border.className = 'd-flex align-items-center py-3 px-4 rounded-3 border-start border-4';
             iconBox.className = 'me-3 fs-5 d-flex align-items-center justify-content-center rounded-2';
             icon.className = 'fas';

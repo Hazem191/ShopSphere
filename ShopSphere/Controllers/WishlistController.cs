@@ -11,6 +11,7 @@ namespace ShopSphere.Controllers
     [Authorize]
     public class WishlistController : Controller
     {
+        #region Fields & Constructor
         private readonly IWishlistRepo wishlistRepo;
         private readonly IEntityRepo<Product, int> productRepo;
         private readonly UserManager<ApplicationUser> userManager;
@@ -24,6 +25,10 @@ namespace ShopSphere.Controllers
             productRepo = _productRepo;
             userManager = _userManager;
         }
+        #endregion
+
+
+        #region Public Actions
 
         public IActionResult Index()
         {
@@ -64,5 +69,6 @@ namespace ShopSphere.Controllers
                 return Json(new { success = true, added = true, message = "Added to wishlist" });
             }
         }
+        #endregion
     }
 }

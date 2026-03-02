@@ -10,6 +10,7 @@ namespace ShopSphere.Controllers
     [Authorize]
     public class ReviewsController : Controller
     {
+        #region Fields & Constructor
         private readonly IEntityRepo<Review, int> reviewRepo;
         private readonly UserManager<ApplicationUser> userManager;
 
@@ -20,7 +21,9 @@ namespace ShopSphere.Controllers
             reviewRepo = _reviewRepo;
             userManager = _userManager;
         }
+        #endregion
 
+        #region Public Actions
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(ReviewVM model)
@@ -29,7 +32,6 @@ namespace ShopSphere.Controllers
             {
                 var userId = userManager.GetUserId(User);
                 
-                // Check if user already reviewed this product
                 var existing = reviewRepo.FindBy(r => r.UserId == userId && r.ProductId == model.ProductId).FirstOrDefault();
                 if (existing != null)
                 {
@@ -53,5 +55,6 @@ namespace ShopSphere.Controllers
 
             return Json(new { success = false, message = "Invalid data." });
         }
+        #endregion
     }
 }

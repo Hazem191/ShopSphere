@@ -115,16 +115,14 @@ else
         .then(r => r.json())
         .then(data => {
             if (data.success && !data.added) {
-                // Shrink and fade out
                 item.style.transition = 'all 0.5s cubic-bezier(0.64, 0, 0.78, 0)';
                 item.style.opacity = '0';
                 item.style.transform = 'scale(0.5) translateY(50px)';
                 
                 setTimeout(() => {
                     item.remove();
-                    // Check if last item
                     if (document.querySelectorAll('[id^="wishlist-item-"]').length === 0) {
-                        location.reload(); // To show empty state or we can inject it
+                        location.reload(); 
                     }
                 }, 500);
                 showAppToast(data.message, 'success');
