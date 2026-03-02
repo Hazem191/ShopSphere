@@ -61,6 +61,10 @@ body {
     padding-bottom: 0.625rem;
 }
 
+.form-floating>.form-control::placeholder {
+    color: transparent !important;
+}
+
 [dir="rtl"] .form-floating>.form-control:focus~label,
 [dir="rtl"] .form-floating>.form-control:not(:placeholder-shown)~label {
     transform: scale(.85) translateY(-0.8rem) translateX(0.5rem) !important;
@@ -287,6 +291,7 @@ body {
 /* Identity Layout Fixes */
 .nav-pills .nav-link.active {
     background-color: var(--primary-color) !important;
+    color: #ffffff !important;
 }
 
 [data-theme="dark"] .nav-pills .nav-link:not(.active) {
