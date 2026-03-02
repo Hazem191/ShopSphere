@@ -111,10 +111,10 @@
 
                             <!-- Remove -->
                             <div class="ms-2">
-                                <a href="@Url.Action("Remove", "Cart", new { productId = item.ProductId })" 
-                                   class="remove-link" onclick="return confirm('@Localizer["حذف؟"]')">
+                                <button type="button" onclick="removeItem(@item.ProductId)" 
+                                        class="btn remove-link border-0 bg-transparent p-0">
                                     <i class="fas fa-times"></i>
-                                </a>
+                                </button>
                             </div>
                         </div>
                     }
@@ -198,6 +198,33 @@
         badges.forEach(badge => {
             badge.innerText = count;
             badge.style.display = count > 0 ? '' : 'none';
+        });
+    }
+
+    function removeItem(productId) {
+        if (!confirm('@Localizer["هل تريد حذف هذا المنتج من السلة؟"]')) return;
+
+        fetch(`/Cart/Remove?productId=${productId}`, {
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                const row = document.getElementById('row-' + productId);
+                row.style.opacity = '0';
+                row.style.transform = 'translateX(20px)';
+                setTimeout(() => {
+                    row.remove();
+                    if (data.totalItems === 0) {
+                        location.reload();
+                    } else {
+                        document.getElementById('grand-total').innerHTML = data.grandTotal?.toLocaleString(undefined, {minimumFractionDigits: 2}) + ' ' + currency;
+                        document.getElementById('total-items').textContent = data.totalItems;
+                        updateBadge(data.totalItems);
+                    }
+                }, 300);
+            }
         });
     }
 </script>

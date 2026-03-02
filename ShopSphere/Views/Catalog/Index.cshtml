@@ -8,41 +8,14 @@
 }
 
 @section Styles {
-<style>
-    .product-card { transition: all .4s cubic-bezier(0.165, 0.84, 0.44, 1); border: 1px solid var(--border-color) !important; overflow: hidden; background: var(--card-bg); }
-    .product-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-md) !important; border-color: var(--primary-color) !important; }
-    .product-img-wrapper { position: relative; height: 230px; background: var(--bg-color); overflow: hidden; }
-    .product-img-wrapper img { transition: transform .6s ease; width: 100%; height: 100%; object-fit: cover; }
-    .product-card:hover .product-img-wrapper img { transform: scale(1.1); }
-    
-    .price-tag { color: var(--primary-color); font-weight: 800; font-size: 1.25rem; }
-    .category-sidebar { 
-        position: sticky; 
-        top: 100px; 
-        max-height: calc(100vh - 120px); 
-        overflow-y: auto; 
-    }
-    /* Hide scrollbar for Chrome, Safari and Opera */
-    .category-sidebar::-webkit-scrollbar { display: none; }
-    /* Hide scrollbar for IE, Edge and Firefox */
-    .category-sidebar { -ms-overflow-style: none; scrollbar-width: none; }
-
-    .filter-card { border: none; box-shadow: var(--shadow-sm); border-radius: 20px; background: var(--card-bg); }
-    
-    .list-group-item.active { background-color: var(--primary-color) !important; border-color: var(--primary-color) !important; }
-    .list-group-item { background-color: transparent !important; color: var(--text-color) !important; border-color: var(--border-color) !important; }
-    .list-group-item:hover { background-color: var(--bg-color) !important; }
-    
-    .btn-stepper { width: 32px; height: 32px; border-radius: 50% !important; display: flex; align-items: center; justify-content: center; padding: 0; background: var(--card-bg) !important; color: var(--text-color) !important; border: 1px solid var(--border-color) !important; }
-    .btn-stepper:hover { background: var(--primary-color) !important; color: #fff !important; }
-
-    /* Fix select arrow overlap in RTL */
-    [dir="rtl"] .form-select {
-        background-position: left 0.75rem center;
-        padding-left: 2.5rem !important;
-        padding-right: 1rem !important;
-    }
-</style>
+    <style>
+        .category-sidebar {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+        }
+    </style>
 }
 
 <div class="row g-4 @(isRTL ? "flex-row-reverse" : "")">
@@ -50,15 +23,15 @@
     <div class="col-lg-3">
         <div class="filter-card card p-4 category-sidebar">
             <h5 class="fw-bold mb-4 d-flex align-items-center">
-                <i class="fas fa-sliders me-3 text-primary ms-0"></i> @Localizer["تصفية النتائج"]
+                <i class="fas fa-sliders me-3 text-primary ms-0"></i> @Localizer["تصفية النتائج"].Value
             </h5>
             
             <form method="get" asp-action="Index">
                 <div class="mb-4">
-                    <label class="form-label small text-muted text-uppercase fw-bold tracking-wider">@Localizer["البحث"]</label>
+                    <label class="form-label small text-muted text-uppercase fw-bold tracking-wider">@Localizer["البحث"].Value</label>
                     <div class="input-group">
                         <input type="text" name="q" class="form-control border-end-0 rounded-start-pill px-3 shadow-none @(isRTL ? "rounded-start-0 rounded-end-pill border-start-0" : "")" 
-                               placeholder='@Localizer["ما الذي تبحث عنه؟"]' value="@Model.SearchQuery" />
+                               placeholder='@Localizer["ما الذي تبحث عنه؟"].Value' value="@Model.SearchQuery" />
                         <button class="btn btn-primary rounded-end-pill px-3 @(isRTL ? "rounded-end-0 rounded-start-pill" : "")" type="submit">
                             <i class="fas fa-search"></i>
                         </button>
@@ -66,11 +39,11 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="form-label small text-muted text-uppercase fw-bold tracking-wider">@Localizer["الأقسام"]</label>
+                    <label class="form-label small text-muted text-uppercase fw-bold tracking-wider">@Localizer["الأقسام"].Value</label>
                     <div class="list-group list-group-flush rounded-4 overflow-hidden border">
                         <a href="?q=@Model.SearchQuery&sort=@Model.Sort"
                            class="list-group-item list-group-item-action py-3 @(Model.SelectedCategoryId == null ? "active" : "")">
-                            @Localizer["جميع المنتجات"]
+                            @Localizer["جميع المنتجات"].Value
                         </a>
                         @foreach (var cat in Model.Categories)
                         {
@@ -83,12 +56,12 @@
                 </div>
 
                 <div class="mb-0">
-                    <label class="form-label small text-muted text-uppercase fw-bold tracking-wider">@Localizer["ترتيب حسب"]</label>
+                    <label class="form-label small text-muted text-uppercase fw-bold tracking-wider">@Localizer["ترتيب حسب"].Value</label>
                     <select name="sort" class="form-select rounded-pill px-3 shadow-none border" onchange="this.form.submit()">
-                        <option value="" selected="@(Model.Sort == null)">@Localizer["الأحدث إضافة"]</option>
-                        <option value="price_asc" selected="@(Model.Sort == "price_asc")">@Localizer["السعر: من الأقل للأعلى"]</option>
-                        <option value="price_desc" selected="@(Model.Sort == "price_desc")">@Localizer["السعر: من الأعلى للأقل"]</option>
-                        <option value="name" selected="@(Model.Sort == "name")">@Localizer["الاسم (أ - ي)"]</option>
+                        <option value="" selected="@(Model.Sort == null)">@Localizer["الأحدث إضافة"].Value</option>
+                        <option value="price_asc" selected="@(Model.Sort == "price_asc")">@Localizer["السعر: من الأقل للأعلى"].Value</option>
+                        <option value="price_desc" selected="@(Model.Sort == "price_desc")">@Localizer["السعر: من الأعلى للأقل"].Value</option>
+                        <option value="name" selected="@(Model.Sort == "name")">@Localizer["الاسم (أ - ي)"].Value</option>
                     </select>
                     <input type="hidden" name="categoryId" value="@Model.SelectedCategoryId" />
                     <input type="hidden" name="q" value="@Model.SearchQuery" />
@@ -103,18 +76,18 @@
             <div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-2">
-                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-decoration-none text-muted">@Localizer["الرئيسية"]</a></li>
-                        <li class="breadcrumb-item active text-primary fw-bold" aria-current="page">@Localizer["المتجر"]</li>
+                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-decoration-none text-muted">@Localizer["الرئيسية"].Value</a></li>
+                        <li class="breadcrumb-item active text-primary fw-bold" aria-current="page">@Localizer["المتجر"].Value</li>
                     </ol>
                 </nav>
                 <h2 class="fw-bold mb-0">
                     @if (!string.IsNullOrEmpty(Model.SearchQuery))
-                    { <span>@Localizer["نتائج البحث لـ"] <span class="text-primary">"@Model.SearchQuery"</span></span> }
+                    { <span>@Localizer["نتائج البحث لـ"].Value <span class="text-primary">"@Model.SearchQuery"</span></span> }
                     else
-                    { @Localizer["جميع المنتجات"] }
+                    { @Localizer["جميع المنتجات"].Value }
                 </h2>
             </div>
-            <div class="text-muted fw-bold">@Model.TotalCount <span class="small fw-normal">@Localizer["منتج متوفر"]</span></div>
+            <div class="text-muted fw-bold">@Model.TotalCount <span class="small fw-normal">@Localizer["منتج متوفر"].Value</span></div>
         </div>
 
         @if (!Model.Products.Any())
@@ -123,9 +96,9 @@
                 <div class="mb-4 d-inline-flex align-items-center justify-content-center" style="width:120px; height:120px; border-radius:40px; background:#f8f9fa;">
                     <i class="fas fa-box-open fa-3x text-muted opacity-25"></i>
                 </div>
-                <h4 class="text-dark fw-bold">@Localizer["عذراً، لم نجد ما تبحث عنه"]</h4>
-                <p class="text-muted">@Localizer["حاول البحث بكلمة أخرى أو تغيير الفئة المختارة"]</p>
-                <a asp-action="Index" class="btn btn-primary rounded-pill mt-3 px-5 py-2 fw-bold">@Localizer["اكتشف كل المنتجات"]</a>
+                <h4 class="text-dark fw-bold">@Localizer["عذراً، لم نجد ما تبحث عنه"].Value</h4>
+                <p class="text-muted">@Localizer["حاول البحث بكلمة أخرى أو تغيير الفئة المختارة"].Value</p>
+                <a asp-action="Index" class="btn btn-primary rounded-pill mt-3 px-5 py-2 fw-bold">@Localizer["اكتشف كل المنتجات"].Value</a>
             </div>
         }
         else
@@ -152,22 +125,46 @@
                                     </div>
                                 }
                                 <div class="position-absolute top-0 @(isRTL ? "start" : "end")-0 p-3">
-                                    <span class="badge @(p.StockQuantity > 0 ? "bg-success" : "bg-danger") rounded-pill shadow-sm">
-                                        @(p.StockQuantity > 0 ? Localizer["متوفر"] : Localizer["نفد"])
+                                    <span id="stock-badge-@p.Id" data-initial-stock="@p.StockQuantity" class="badge @(p.StockQuantity - currentQty <= 0 ? "bg-danger" : (p.StockQuantity - currentQty < 10 ? "bg-warning text-dark" : "bg-success")) rounded-pill shadow-sm badge-premium">
+                                        <span class="stock-text">
+                                            @if (p.StockQuantity - currentQty <= 0) { @Localizer["نفد"].Value }
+                                            else if (p.StockQuantity - currentQty < 10) { @($"{Localizer["بقي"].Value} {p.StockQuantity - currentQty}") }
+                                            else { @Localizer["متوفر"].Value }
+                                        </span>
                                     </span>
                                 </div>
                             </div>
 
                             <!-- Body -->
-                            <div class="card-body p-4 d-flex flex-column">
-                                <h5 class="fw-bold mb-2 text-dark">@p.Name</h5>
+                            <div class="card-body p-4 d-flex flex-column position-relative">
+                                <div class="d-flex justify-content-between align-items-start mb-2 @(isRTL ? "ps-0" : "pe-0")">
+                                    <h5 class="fw-bold mb-0 text-dark text-truncate" style="max-width: 80%;">@p.Name</h5>
+                                    <div class="d-flex gap-2">
+                                        @if (p.Reviews?.Any() == true)
+                                        {
+                                            <div class="text-warning small d-flex align-items-center">
+                                                <i class="fas fa-star me-1"></i>
+                                                <span class="text-muted small">@p.Reviews.Average(r => r.Rating).ToString("0.0")</span>
+                                            </div>
+                                        }
+                                        @if (User.Identity.IsAuthenticated)
+                                        {
+                                            var isInWishlist = p.WishlistItems?.Any(w => w.UserId == User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value) ?? false;
+                                            <button type="button" onclick="toggleWishlist(this, @p.Id)" 
+                                                    class="btn btn-link p-0 text-danger border-0 shadow-none hover-scale" 
+                                                    style="width:24px; height:24px; transition: all 0.2s ease;">
+                                                <i class="fa@(isInWishlist ? "s" : "r") fa-heart fs-5"></i>
+                                            </button>
+                                        }
+                                    </div>
+                                </div>
                                 <p class="text-muted small mb-4 flex-grow-1 line-clamp-2">
                                     @(p.Description?.Length > 80 ? p.Description.Substring(0, 80) + "..." : (p.Description ?? Localizer["لا يوجد وصف لهذا المنتج"].Value))
                                 </p>
                                 
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="price-tag">
-                                        @p.Price.ToString("N0") <span class="small fw-normal h6 opacity-75">@Localizer["ج.م"]</span>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div class="price-tag h5 fw-bold mb-0">
+                                        @p.Price.ToString("N0") <span class="small fw-normal opacity-75">@Localizer["ج.م"].Value</span>
                                     </div>
                                 </div>
                             </div>
@@ -175,8 +172,8 @@
                             <!-- Footer Actions -->
                             <div class="card-footer bg-white border-0 px-4 pb-4">
                                 <div class="action-container d-flex gap-2 align-items-center">
-                                    <a asp-action="Details" asp-route-id="@p.Id" class="btn btn-light rounded-pill px-3 border flex-fill fw-bold">
-                                        @Localizer["التفاصيل"]
+                                    <a asp-action="Details" asp-route-id="@p.Id" class="btn btn-light rounded-pill px-3 flex-fill fw-bold shadow-sm border">
+                                        <i class="fas fa-info-circle me-1"></i> @Localizer["التفاصيل"].Value
                                     </a>
 
                                     @if (p.StockQuantity > 0 && !User.IsInRole("Admin"))
@@ -185,7 +182,7 @@
                                         <div class="flex-fill">
                                             <button type="button" onclick="addToCart(this, @p.Id)" id="addbtn-@p.Id" 
                                                     class="btn btn-primary w-100 rounded-pill fw-bold @(currentQty > 0 ? "d-none" : "")">
-                                                <i class="fas fa-cart-plus me-2 ms-0"></i> @Localizer["أضف"]
+                                                <i class="fas fa-cart-plus me-2 ms-0"></i> @Localizer["أضف"].Value
                                             </button>
 
                                             <div id="stepper-@p.Id" class="align-items-center justify-content-between bg-light rounded-pill p-1 border @(currentQty > 0 ? "d-flex" : "d-none")">
@@ -198,6 +195,11 @@
                                                 </button>
                                             </div>
                                         </div>
+
+                                        <button type="button" id="removebtn-@p.Id" onclick="removeFromCart(@p.Id)" 
+                                                class="btn btn-outline-danger rounded-pill px-3 fw-bold @(currentQty > 0 ? "" : "d-none")" title='@Localizer["حذف"].Value'>
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
                                     }
                                 </div>
                             </div>
@@ -225,17 +227,7 @@
     </div>
 </div>
 
-<!-- Toast -->
-<div class="toast-container position-fixed bottom-0 @(isRTL ? "start" : "end")-0 p-3">
-    <div id="cartToast" class="toast border-0 shadow-lg rounded-4 overflow-hidden" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="d-flex align-items-center py-3 px-4 bg-primary text-white">
-            <i class="fas fa-check-circle me-3 fs-4"></i>
-            <div class="toast-body p-0 fw-bold" id="toastMsg"></div>
-            <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="toast"></button>
-        </div>
-    </div>
 </div>
-
 @Html.AntiForgeryToken()
 
 @section Scripts {
@@ -251,16 +243,18 @@
         .then(r => r.json())
         .then(data => {
             btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-cart-plus me-2 ms-0"></i> @Localizer["أضف"]';
+            btn.innerHTML = '<i class="fas fa-cart-plus me-2 ms-0"></i> @Localizer["أضف"].Value';
             if (data.success) {
                 btn.classList.add('d-none');
                 const stepper = document.getElementById(`stepper-${productId}`);
                 stepper.classList.remove('d-none');
                 stepper.classList.add('d-flex');
                 document.getElementById(`qcount-${productId}`).innerText = '1';
+                document.getElementById(`removebtn-${productId}`).classList.remove('d-none');
                 
-                showToast(data.message);
+                showAppToast(data.message);
                 updateBadge(data.totalItems);
+                updateStockDisplay(productId, 1);
             }
         });
     }
@@ -277,11 +271,51 @@
             if (data.newQty <= 0) {
                 document.getElementById(`stepper-${productId}`).classList.replace('d-flex', 'd-none');
                 document.getElementById(`addbtn-${productId}`).classList.remove('d-none');
+                document.getElementById(`removebtn-${productId}`).classList.add('d-none');
             } else {
                 qcount.innerText = data.newQty;
             }
             updateBadge(data.totalItems);
+            updateStockDisplay(productId, data.newQty);
         });
+    }
+
+    function removeFromCart(productId) {
+        fetch(`/Cart/Remove?productId=${productId}`, {
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById(`stepper-${productId}`).classList.replace('d-flex', 'd-none');
+                document.getElementById(`addbtn-${productId}`).classList.remove('d-none');
+                document.getElementById(`removebtn-${productId}`).classList.add('d-none');
+                showAppToast(data.message);
+                updateBadge(data.totalItems);
+                updateStockDisplay(productId, 0);
+            }
+        });
+    }
+
+    function updateStockDisplay(productId, cartQty) {
+        const badge = document.getElementById(`stock-badge-${productId}`);
+        if (!badge) return;
+        const initialStock = parseInt(badge.getAttribute('data-initial-stock'));
+        const remaining = initialStock - cartQty;
+        const textSpan = badge.querySelector('.stock-text');
+        
+        // Update class
+        badge.className = `badge rounded-pill shadow-sm badge-premium ${remaining <= 0 ? 'bg-danger' : (remaining < 10 ? 'bg-warning text-dark' : 'bg-success')}`;
+        
+        // Update text (Ideally we use Localizer strings but in JS we might need to simplify or use data attributes)
+        if (remaining <= 0) {
+            textSpan.innerText = '@Localizer["نفد"].Value';
+        } else if (remaining < 10) {
+            textSpan.innerText = `@Localizer["بقي"].Value ${remaining}`;
+        } else {
+            textSpan.innerText = '@Localizer["متوفر"].Value';
+        }
     }
 
     function updateBadge(count) {
@@ -292,10 +326,26 @@
         });
     }
 
-    function showToast(msg) {
-        document.getElementById('toastMsg').innerText = msg;
-        const toast = new bootstrap.Toast(document.getElementById('cartToast'));
-        toast.show();
+    function toggleWishlist(btn, productId) {
+        fetch(`/Wishlist/Toggle?productId=${productId}`, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+            }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                const icon = btn.querySelector('i');
+                if (data.added) {
+                    icon.classList.replace('far', 'fas');
+                } else {
+                    icon.classList.replace('fas', 'far');
+                }
+                showAppToast(data.message);
+            }
+        });
     }
 </script>
 }

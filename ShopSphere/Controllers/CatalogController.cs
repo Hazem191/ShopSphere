@@ -68,7 +68,7 @@ namespace ShopSphere.Controllers
 
         public IActionResult Details(int id)
         {
-            var product = productRepo.GetById(id);
+            var product = productRepo.GetAll().FirstOrDefault(p => p.Id == id);
             if (product == null) return NotFound();
 
             var cartJson = HttpContext.Session.GetString("Cart");

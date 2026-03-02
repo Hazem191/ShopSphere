@@ -1,0 +1,210 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model List<Product>
+@{
+    ViewData["Title"] = Localizer["قائمة الأمنيات"].Value;
+    var isRTL = System.Globalization.CultureInfo.CurrentCulture.Name.StartsWith("ar");
+}
+
+<div class="d-flex justify-content-between align-items-end mb-5">
+    <div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-decoration-none text-muted">@Localizer["الرئيسية"].Value</a></li>
+                <li class="breadcrumb-item active text-primary fw-bold" aria-current="page">@Localizer["قائمة الأمنيات"].Value</li>
+            </ol>
+        </nav>
+        <h2 class="fw-bold mb-0">@Localizer["قائمة الأمنيات الخاصة بك"].Value</h2>
+    </div>
+    <div class="text-muted fw-bold">@Model.Count <span class="small fw-normal">@Localizer["منتج"].Value</span></div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="text-center py-5 bg-white rounded-5 shadow-sm">
+        <div class="mb-4 d-inline-flex align-items-center justify-content-center" style="width:120px; height:120px; border-radius:40px; background:#fff5f5;">
+            <i class="fas fa-heart fa-3x text-danger opacity-25"></i>
+        </div>
+        <h4 class="text-dark fw-bold">@Localizer["قائمة الأمنيات فارغة"].Value</h4>
+        <p class="text-muted">@Localizer["ابدأ بإضافة بعض المنتجات التي تعجبك!"].Value</p>
+        <a asp-controller="Catalog" asp-action="Index" class="btn btn-primary rounded-pill mt-3 px-5 py-2 fw-bold">@Localizer["اكتشف كل المنتجات"].Value</a>
+    </div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+        @foreach (var p in Model)
+        {
+            var cartItems = ViewBag.Cart as List<ShopSphere.ViewModels.CartItemVM>;
+            var currentQty = cartItems?.FirstOrDefault(c => c.ProductId == p.Id)?.Quantity ?? 0;
+
+            <div class="col" id="wishlist-item-@p.Id">
+                <div class="card h-100 product-card border-0 bg-white rounded-4 shadow-sm overflow-hidden" style="transition: all 0.3s ease;">
+                    <div class="position-relative" style="height: 200px; overflow: hidden; background: #f8f9fa;">
+                        @if (!string.IsNullOrEmpty(p.ImageUrl))
+                        {
+                            <img src="@p.ImageUrl" class="w-100 h-100 object-fit-cover" alt="@p.Name" />
+                        }
+                        else
+                        {
+                            <div class="d-flex align-items-center justify-content-center h-100 opacity-25">
+                                <i class="fas fa-box fa-3x"></i>
+                            </div>
+                        }
+                        <button type="button" onclick="removeFromWishlist(@p.Id)" 
+                                class="btn btn-danger btn-sm rounded-circle position-absolute top-0 end-0 m-2 shadow-sm" 
+                                style="width:32px; height:32px;">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                    <div class="card-body p-3">
+                        <h6 class="fw-bold mb-1 text-truncate">@p.Name</h6>
+                        <div class="text-primary fw-bold mb-3">@p.Price.ToString("N0") @Localizer["ج.م"].Value</div>
+                        <div class="d-grid gap-2">
+                            <a asp-controller="Catalog" asp-action="Details" asp-route-id="@p.Id" class="btn btn-light btn-sm rounded-pill fw-bold border">
+                                @Localizer["التفاصيل"].Value
+                            </a>
+                            @if (p.StockQuantity > 0)
+                            {
+                                <div class="d-flex gap-1 align-items-center">
+                                    <div class="flex-fill">
+                                        <button type="button" onclick="addToCart(this, @p.Id)" id="addbtn-@p.Id" 
+                                                class="btn btn-primary btn-sm w-100 rounded-pill fw-bold @(currentQty > 0 ? "d-none" : "")">
+                                            <i class="fas fa-cart-plus me-1"></i> @Localizer["أضف"].Value
+                                        </button>
+
+                                        <div id="stepper-@p.Id" class="align-items-center justify-content-between bg-light rounded-pill p-1 border @(currentQty > 0 ? "d-flex" : "d-none")">
+                                            <button type="button" onclick="changeQty(@p.Id, -1)" class="btn btn-white btn-stepper shadow-sm border p-0" style="width:24px; height:24px;">
+                                                <i class="fas fa-minus text-muted small"></i>
+                                            </button>
+                                            <span id="qcount-@p.Id" class="fw-bold px-2 text-primary small">@currentQty</span>
+                                            <button type="button" onclick="changeQty(@p.Id, 1)" class="btn btn-white btn-stepper shadow-sm border p-0" style="width:24px; height:24px;">
+                                                <i class="fas fa-plus text-primary small"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <button type="button" id="removebtn-@p.Id" onclick="removeFromCart(@p.Id)" 
+                                            class="btn btn-outline-danger btn-sm rounded-circle @(currentQty > 0 ? "" : "d-none")" style="width:32px; height:32px;">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@Html.AntiForgeryToken()
+
+@section Scripts {
+<script>
+    function removeFromWishlist(productId) {
+        const item = document.getElementById(`wishlist-item-${productId}`);
+        item.style.pointerEvents = 'none';
+        
+        fetch(`/Wishlist/Toggle?productId=${productId}`, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+            }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && !data.added) {
+                // Shrink and fade out
+                item.style.transition = 'all 0.5s cubic-bezier(0.64, 0, 0.78, 0)';
+                item.style.opacity = '0';
+                item.style.transform = 'scale(0.5) translateY(50px)';
+                
+                setTimeout(() => {
+                    item.remove();
+                    // Check if last item
+                    if (document.querySelectorAll('[id^="wishlist-item-"]').length === 0) {
+                        location.reload(); // To show empty state or we can inject it
+                    }
+                }, 500);
+                showAppToast(data.message, 'success');
+            }
+        })
+        .catch(() => {
+            item.style.pointerEvents = 'all';
+            showAppToast('@Localizer["حدث خطأ ما"].Value', 'error');
+        });
+    }
+
+    function addToCart(btn, productId) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+        fetch(`/Cart/Add?productId=${productId}`, {
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(r => r.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-cart-plus me-1"></i> @Localizer["أضف"].Value';
+            if (data.success) {
+                btn.classList.add('d-none');
+                const stepper = document.getElementById(`stepper-${productId}`);
+                stepper.classList.remove('d-none');
+                stepper.classList.add('d-flex');
+                document.getElementById(`qcount-${productId}`).innerText = '1';
+                document.getElementById(`removebtn-${productId}`).classList.remove('d-none');
+                
+                showAppToast(data.message);
+                updateBadge(data.totalItems);
+            }
+        });
+    }
+
+    function changeQty(productId, delta) {
+        fetch(`/Cart/UpdateQty?productId=${productId}&delta=${delta}`, {
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (!data.success) return;
+            const qcount = document.getElementById(`qcount-${productId}`);
+            if (data.newQty <= 0) {
+                document.getElementById(`stepper-${productId}`).classList.replace('d-flex', 'd-none');
+                document.getElementById(`addbtn-${productId}`).classList.remove('d-none');
+                document.getElementById(`removebtn-${productId}`).classList.add('d-none');
+            } else {
+                qcount.innerText = data.newQty;
+            }
+            updateBadge(data.totalItems);
+        });
+    }
+
+    function removeFromCart(productId) {
+        fetch(`/Cart/Remove?productId=${productId}`, {
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById(`stepper-${productId}`).classList.replace('d-flex', 'd-none');
+                document.getElementById(`addbtn-${productId}`).classList.remove('d-none');
+                document.getElementById(`removebtn-${productId}`).classList.add('d-none');
+                showAppToast(data.message);
+                updateBadge(data.totalItems);
+            }
+        });
+    }
+
+    function updateBadge(count) {
+        const badges = document.querySelectorAll('.cart-count-badge');
+        badges.forEach(badge => {
+            badge.innerText = count;
+            badge.style.display = count > 0 ? '' : 'none';
+        });
+    }
+</script>
+}

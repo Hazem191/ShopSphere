@@ -19,6 +19,9 @@ public class ProductRepo : EntityRepo<Product, int>, IProductRepo
 
     public override List<Product> GetAll()
     {
-        return _context.Products.Include(p => p.Category).ToList();
+        return _context.Products.Include(p => p.Category)
+            .Include(p => p.Reviews).ThenInclude(r => r.User)
+            .Include(p => p.WishlistItems)
+            .ToList();
     }
 }

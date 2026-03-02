@@ -61,6 +61,32 @@ namespace ShopSphere.Data
                 .HasForeignKey(o => o.AddressId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Review Relations
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.Product)
+                .WithMany(p => p.Reviews)
+                .HasForeignKey(r => r.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.User)
+                .WithMany()
+                .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Wishlist Relations
+            modelBuilder.Entity<WishlistItem>()
+                .HasOne(w => w.Product)
+                .WithMany(p => p.WishlistItems)
+                .HasForeignKey(w => w.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<WishlistItem>()
+                .HasOne(w => w.User)
+                .WithMany()
+                .HasForeignKey(w => w.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
 
 
             modelBuilder.Entity<Product>()
@@ -98,6 +124,8 @@ namespace ShopSphere.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Address> Addresses { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+        public DbSet<WishlistItem> WishlistItems { get; set; }
 
     }
 }

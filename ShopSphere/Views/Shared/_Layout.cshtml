@@ -17,39 +17,44 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <style>
         :root {
-            --bg-color: #f4f6f9;
+            --bg-color: #f8fafc;
             --card-bg: #ffffff;
-            --text-color: #1e293b;
+            --text-color: #0f172a;
             --text-muted: #64748b;
-            --border-color: #e5e7eb;
-            --nav-bg: rgba(255, 255, 255, 0.95);
+            --border-color: #e2e8f0;
+            --nav-bg: rgba(255, 255, 255, 0.85);
             --nav-text: #334155;
             --footer-bg: #0f172a;
-            --primary-color: #7c3aed;   /* Royal Purple */
-            --primary-hover: #6d28d9;
-            --accent-color: #22c55e;
-            --accent-hover: #16a34a;
-            --danger-color: #ef4444;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
-            --shadow-md: 0 6px 20px rgba(0,0,0,0.08);
+            --primary-color: #6366f1;   /* Indigo/Premium Purple */
+            --primary-rgb: 99, 102, 241;
+            --primary-hover: #4f46e5;
+            --accent-color: #10b981;
+            --accent-hover: #059669;
+            --danger-color: #f43f5e;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 10px 25px -5px rgba(0,0,0,0.04), 0 8px 10px -6px rgba(0,0,0,0.04);
+            --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --theme-filter: none;
         }
 
         [data-theme="dark"] {
-            --bg-color: #0b1220;
-            --card-bg: #111827;
-            --text-color: #f1f5f9;
+            --bg-color: #020617;
+            --card-bg: #0f172a;
+            --text-color: #f8fafc;
             --text-muted: #94a3b8;
-            --border-color: #1f2937;
-            --nav-bg: rgba(11, 18, 32, 0.9);
+            --border-color: #1e293b;
+            --nav-bg: rgba(2, 6, 23, 0.8);
             --nav-text: #e2e8f0;
-            --footer-bg: #020617;
-            --primary-color: #8b5cf6;
-            --primary-hover: #a78bfa;
-            --accent-color: #22c55e;
-            --accent-hover: #4ade80;
-            --danger-color: #f87171;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
-            --shadow-md: 0 8px 24px rgba(0,0,0,0.4);
+            --footer-bg: #000000;
+            --primary-color: #818cf8;
+            --primary-rgb: 129, 140, 248;
+            --primary-hover: #a5b4fc;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
+            --shadow-md: 0 12px 28px rgba(0,0,0,0.5);
+            --shadow-lg: 0 24px 38px rgba(0,0,0,0.6);
+            --glass-bg: rgba(15, 23, 42, 0.7);
+            --theme-filter: invert(1);
         }
 
         html, body {
@@ -291,6 +296,12 @@
                         <li class="nav-item">
                             <a class="nav-link px-3 @(Context.Request.Path.StartsWithSegments("/Catalog") ? "active" : "")" asp-area="" asp-controller="Catalog" asp-action="Index">@Localizer["المنتجات"]</a>
                         </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link px-3 @(Context.Request.Path.StartsWithSegments("/Wishlist") ? "active" : "")" asp-area="" asp-controller="Wishlist" asp-action="Index">@Localizer["الأمنيات"]</a>
+                            </li>
+                        }
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item dropdown">
@@ -361,6 +372,21 @@
         </script>
     </header>
 
+    <!-- Global Toast Container -->
+    <div class="toast-container position-fixed bottom-0 @(isRTL ? "start-0" : "end-0") p-3" style="z-index: 2000;">
+        <div id="appToast" class="toast border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true" style="border-radius: 12px; background: rgba(var(--nav-bg), 0.9); backdrop-filter: blur(10px);">
+            <div class="d-flex align-items-center py-3 px-4 rounded-3 border-start border-4" id="toast-border">
+                <div id="toast-icon-box" class="me-3 fs-5 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; border-radius: 8px;">
+                    <i class="fas" id="toast-icon"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <p class="mb-0 fw-bold" id="toast-message" style="color: var(--text-color); font-size: 0.9rem;"></p>
+                </div>
+                <button type="button" class="btn-close ms-3 @(isRTL ? "me-auto ms-0" : "")" data-bs-dismiss="toast" aria-label="Close" style="filter: var(--theme-filter); opacity: 0.5;"></button>
+            </div>
+        </div>
+    </div>
+
     <main class="flex-grow-1">
         <div class="container py-4">
             @if (TempData["Success"] != null)
@@ -414,10 +440,21 @@
                 </div>
                 <div class="col-md-6 text-center text-md-@(isRTL ? "start" : "end")">
                     <div class="footer-social-pill d-inline-flex gap-2">
-                        <a href="#" class="dark-social-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.facebook.com/hazem.ibrahim.9847" class="dark-social-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" class="dark-social-link" title="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="dark-social-link" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                        <a href="mailto:support@shopsphere.com" class="dark-social-link" title="Email"><i class="fas fa-envelope"></i></a>
+                        <a href="https://www.linkedin.com/in/hazem-aldriny-525a152b4"
+                           class="dark-social-link"
+                           title="LinkedIn"
+                           target="_blank">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="https://wa.me/201060502411"
+                           class="dark-social-link"
+                           title="WhatsApp"
+                           target="_blank">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>    
+                        <a href="mailto:hazem.aldriny@gmail.com" class="dark-social-link" title="Email"><i class="fas fa-envelope"></i></a>
                     </div>
                 </div>
             </div>
@@ -566,6 +603,41 @@
             localStorage.setItem('theme', newTheme);
             updateIcons(newTheme);
         });
+
+        // Global Toast Function
+        window.showAppToast = function(message, type = 'success') {
+            const toast = document.getElementById('appToast');
+            const border = document.getElementById('toast-border');
+            const iconBox = document.getElementById('toast-icon-box');
+            const icon = document.getElementById('toast-icon');
+            const msg = document.getElementById('toast-message');
+
+            if (!toast || !msg) return;
+
+            msg.innerText = message;
+            
+            // Reset classes
+            border.className = 'd-flex align-items-center py-3 px-4 rounded-3 border-start border-4';
+            iconBox.className = 'me-3 fs-5 d-flex align-items-center justify-content-center rounded-2';
+            icon.className = 'fas';
+
+            if (type === 'success') {
+                border.classList.add('border-success');
+                iconBox.classList.add('bg-success', 'text-white');
+                icon.classList.add('fa-check-circle');
+            } else if (type === 'error') {
+                border.classList.add('border-danger');
+                iconBox.classList.add('bg-danger', 'text-white');
+                icon.classList.add('fa-exclamation-circle');
+            } else {
+                border.classList.add('border-primary');
+                iconBox.classList.add('bg-primary', 'text-white');
+                icon.classList.add('fa-info-circle');
+            }
+
+            const bsToast = new bootstrap.Toast(toast, { autohide: true, delay: 5000 });
+            bsToast.show();
+        };
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 

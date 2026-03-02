@@ -7,16 +7,16 @@
 }
 
 <nav aria-label="breadcrumb" class="mb-4">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">@Localizer["الرئيسية"]</a></li>
-        <li class="breadcrumb-item"><a asp-area="" asp-controller="Catalog" asp-action="Index">@Localizer["المنتجات"]</a></li>
-        <li class="breadcrumb-item active">@Model.Name</li>
+    <ol class="breadcrumb py-2 px-3 bg-light rounded-pill shadow-sm d-inline-flex">
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index" class="text-decoration-none">@Localizer["الرئيسية"].Value</a></li>
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Catalog" asp-action="Index" class="text-decoration-none">@Localizer["المنتجات"].Value</a></li>
+        <li class="breadcrumb-item active text-primary fw-bold">@Model.Name</li>
     </ol>
 </nav>
 
 <div class="row g-5 @(isRTL ? "flex-row-reverse" : "")">
     <div class="col-md-5">
-        <div class="card p-0 text-center shadow-sm border-0" style="border-radius:20px; min-height:350px; overflow:hidden; background:#f8f9fa;">
+        <div class="card p-0 text-center shadow-sm border-0" style="border-radius:24px; min-height:400px; overflow:hidden; background: var(--card-bg);">
             @if (!string.IsNullOrEmpty(Model.ImageUrl))
             {
                 <img src="@Model.ImageUrl" class="img-fluid w-100 h-100 object-fit-contain" alt="@Model.Name" />
@@ -28,33 +28,41 @@
                 </div>
             }
         </div>
-    </div>
+    </div> 
 
     <div class="col-md-7">
         <h1 class="fw-bold mb-1">@Model.Name</h1>
         <p class="text-muted mb-3">SKU: @Model.SKU</p>
         
-        <div class="mb-4">
-            @if (Model.StockQuantity > 0)
-            {
-                <span class="badge bg-success fs-6 rounded-pill px-3">
-                    <i class="fas fa-check-circle me-1"></i> @Localizer["متوفر"] (@Model.StockQuantity @Localizer["قطعة"])
-                </span>
+        <div class="mb-4 d-flex align-items-center gap-2">
+            @{
+                int currentCartQty = ViewBag.CartQty ?? 0;
             }
-            else
-            {
-                <span class="badge bg-danger fs-6 rounded-pill px-3">
-                    <i class="fas fa-times-circle me-1"></i> @Localizer["نفد من المخزون"]
+            <span id="stock-badge-details" data-initial-stock="@Model.StockQuantity" class="badge @(Model.StockQuantity - currentCartQty <= 0 ? "bg-danger" : (Model.StockQuantity - currentCartQty < 10 ? "bg-warning text-dark" : "bg-success")) fs-6 rounded-pill px-3 badge-premium">
+                <i class="fas @(Model.StockQuantity - currentCartQty < 10 ? (Model.StockQuantity - currentCartQty <= 0 ? "fa-times-circle" : "fa-exclamation-triangle") : "fa-check-circle") me-1"></i>
+                <span class="stock-text">
+                    @if (Model.StockQuantity - currentCartQty <= 0) { @Localizer["نفد"].Value }
+                    else { @Localizer["متوفر"].Value @if(Model.StockQuantity-currentCartQty < 10){ <text>(@Localizer["بقي"].Value @(Model.StockQuantity - currentCartQty))</text> } }
                 </span>
+            </span>
+            
+            @if (User.Identity.IsAuthenticated)
+            {
+                var isInWishlist = Model.WishlistItems?.Any(w => w.UserId == User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value) ?? false;
+                <button type="button" onclick="toggleWishlist(@Model.Id)" id="wishlist-btn-@Model.Id" 
+                        class="btn @(isInWishlist ? "btn-danger" : "btn-outline-danger") rounded-circle shadow-sm d-flex align-items-center justify-content-center ms-auto" 
+                        style="width:46px; height:46px; transition: all 0.3s ease; border-width: 2px;">
+                    <i class="fa@(isInWishlist ? "s" : "r") fa-heart fa-lg"></i>
+                </button>
             }
         </div>
 
-        <h2 class="fw-bold mb-4 text-primary" style="font-size:2.5rem;">@Model.Price.ToString("N2") @Localizer["ج.م"]</h2>
+        <h2 class="fw-bold mb-4 text-primary" style="font-size:2.5rem;">@Model.Price.ToString("N2") @Localizer["ج.م"].Value</h2>
 
         @if (!string.IsNullOrEmpty(Model.Description))
         {
             <div class="mb-4">
-                <h6 class="fw-bold text-muted mb-2">@Localizer["الوصف"]</h6>
+                <h6 class="fw-bold text-muted mb-2">@Localizer["الوصف"].Value</h6>
                 <p class="text-muted lh-lg">@Model.Description</p>
             </div>
         }
@@ -67,7 +75,7 @@
                 <div id="add-btn-container" class="@(cartQty > 0 ? "d-none" : "")">
                     <button type="button" onclick="addToCart(this, @Model.Id)"
                             class="btn btn-primary btn-lg px-5 rounded-pill shadow-sm border-0">
-                        <i class="fas fa-cart-plus me-2"></i> @Localizer["أضف إلى السلة"]
+                        <i class="fas fa-cart-plus me-2"></i> @Localizer["أضف إلى السلة"].Value
                     </button>
                 </div>
 
@@ -84,55 +92,128 @@
                         <i class="fas fa-plus text-primary"></i>
                     </button>
                 </div>
+
+                <div id="remove-btn-container" class="@(cartQty > 0 ? "" : "d-none")">
+                    <button type="button" onclick="removeFromCart(@Model.Id)"
+                            class="btn btn-outline-danger btn-lg rounded-pill px-4 shadow-sm">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
             }
             <a asp-area="" asp-action="Index" class="btn btn-outline-secondary btn-lg rounded-pill px-4">
-                <i class="fas fa-@(isRTL ? "arrow-right" : "arrow-left") me-1"></i> @Localizer["عودة"]
+                <i class="fas fa-@(isRTL ? "arrow-right" : "arrow-left") me-1"></i> @Localizer["عودة"].Value
             </a>
         </div>
 
-        <hr class="my-4 opacity-10">
-        
-        <div class="row text-center g-3">
+        <hr class="my-5 opacity-10">
+
+        <!-- Reviews Section -->
+        <div class="reviews-section">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="fw-bold mb-0">@Localizer["المراجعات"].Value (@(Model.Reviews?.Count ?? 0))</h4>
+                @if (Model.Reviews?.Any() == true)
+                {
+                    <div class="text-warning">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <i class="fa@(i <= Math.Round(Model.Reviews.Average(r => r.Rating)) ? "s" : "r") fa-star"></i>
+                        }
+                        <span class="text-muted small ms-1">(@Model.Reviews.Average(r => r.Rating).ToString("0.0"))</span>
+                    </div>
+                }
+            </div>
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="card border-0 bg-light rounded-4 p-4 mb-4">
+                    <h6 class="fw-bold mb-3">@Localizer["أضف مراجعتك"].Value</h6>
+                    <form id="reviewForm" onsubmit="submitReview(event)">
+                        <input type="hidden" name="ProductId" value="@Model.Id" />
+                        <div class="mb-3">
+                            <label class="form-label small text-muted">@Localizer["التقييم"].Value</label>
+                            <div class="rating-input d-flex gap-2">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <input type="radio" name="Rating" value="@i" id="star-@i" class="d-none" required />
+                                    <label for="star-@i" class="cursor-pointer text-muted star-icon" onclick="highlightStars(@i)">
+                                        <i class="far fa-star fa-lg"></i>
+                                    </label>
+                                }
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <textarea name="Comment" class="form-control rounded-4 border-0 shadow-sm" rows="3" placeholder='@Localizer["اكتب تعليقك هنا..."].Value' required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary rounded-pill px-4">@Localizer["إرسال المراجعة"].Value</button>
+                    </form>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info rounded-4 border-0">
+                    <i class="fas fa-info-circle me-2"></i> @Localizer["يرجى تسجيل الدخول لتتمكن من إضافة مراجعة."].Value
+                </div>
+            }
+
+            <div id="reviews-list">
+                @if (Model.Reviews?.Any() == true)
+                {
+                    @foreach (var review in Model.Reviews.OrderByDescending(r => r.CreatedAt))
+                    {
+                        <div class="review-item mb-4 pb-4 border-bottom">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <span class="fw-bold d-block">@(review.User?.UserName ?? "Anonymous")</span>
+                                    <small class="text-muted">@review.CreatedAt.ToString("dd/MM/yyyy")</small>
+                                </div>
+                                <div class="text-warning small">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <i class="fa@(i <= review.Rating ? "s" : "r") fa-star"></i>
+                                    }
+                                </div>
+                            </div>
+                            <p class="mb-0 text-muted">@review.Comment</p>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p class="text-muted text-center py-4">@Localizer["لا توجد مراجعات بعد. كن أول من يكتب مراجعة!"].Value</p>
+                }
+            </div>
+        </div>
+
+        <div class="row text-center g-3 mt-4">
             <div class="col-4">
                 <div class="p-3 rounded-4 bg-light shadow-xs">
                     <i class="fas fa-truck text-primary mb-2 d-block fa-lg"></i>
-                    <small class="text-muted fw-bold">@Localizer["شحن سريع"]</small>
+                    <small class="text-muted fw-bold">@Localizer["شحن سريع"].Value</small>
                 </div>
             </div>
             <div class="col-4">
                 <div class="p-3 rounded-4 bg-light shadow-xs">
                     <i class="fas fa-shield-alt text-success mb-2 d-block fa-lg"></i>
-                    <small class="text-muted fw-bold">@Localizer["دفع آمن"]</small>
+                    <small class="text-muted fw-bold">@Localizer["دفع آمن"].Value</small>
                 </div>
             </div>
             <div class="col-4">
                 <div class="p-3 rounded-4 bg-light shadow-xs">
                     <i class="fas fa-undo text-warning mb-2 d-block fa-lg"></i>
-                    <small class="text-muted fw-bold">@Localizer["إرجاع مجاني"]</small>
+                    <small class="text-muted fw-bold">@Localizer["إرجاع مجاني"].Value</small>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Toast -->
-<div class="position-fixed bottom-0 end-0 p-3" style="z-index:9999">
-    <div id="cartToast" class="toast align-items-center text-white border-0 shadow-lg" role="alert" style="border-radius:12px; background:linear-gradient(135deg,#6c3fc5,#9b59b6);">
-        <div class="d-flex">
-            <div class="toast-body d-flex align-items-center gap-2">
-                <i class="fas fa-check-circle"></i>
-                <span id="toastMsg"></span>
-            </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-        </div>
-    </div>
-</div>
+@Html.AntiForgeryToken()
 
 @section Scripts {
 <script>
 function addToCart(btn, productId) {
     btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> @Localizer["جاري الإضافة..."]';
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> @Localizer["جاري الإضافة..."].Value';
     fetch('/Cart/Add?productId=' + productId, {
         method: 'GET',
         headers: { 'X-Requested-With': 'XMLHttpRequest' }
@@ -141,19 +222,20 @@ function addToCart(btn, productId) {
     .then(data => {
         if (data.success) {
             // Show toast
-            document.getElementById('toastMsg').textContent = data.message;
-            new bootstrap.Toast(document.getElementById('cartToast'), { delay: 3000 }).show();
+            showAppToast(data.message);
             
-            // Update UI: Hide button, show stepper
+            // Update UI: Hide button, show stepper and remove btn
             document.getElementById('add-btn-container').classList.add('d-none');
+            document.getElementById('remove-btn-container')?.classList.remove('d-none');
             const stepper = document.getElementById('qty-stepper');
             stepper.classList.remove('d-none');
             document.getElementById('product-qty').textContent = '1';
             
             updateBadge(data.totalItems);
+            updateStockDisplay(1);
         }
         btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-cart-plus me-2"></i> @Localizer["أضف إلى السلة"]';
+        btn.innerHTML = '<i class="fas fa-cart-plus me-2"></i> @Localizer["أضف إلى السلة"].Value';
     });
 }
 
@@ -177,11 +259,113 @@ function changeQty(productId, delta) {
                 // Show add button again
                 document.getElementById('add-btn-container').classList.remove('d-none');
                 document.getElementById('qty-stepper').classList.add('d-none');
+                document.getElementById('remove-btn-container')?.classList.add('d-none');
             } else {
                 document.getElementById('product-qty').textContent = data.newQty;
             }
             
             updateBadge(data.totalItems);
+            updateStockDisplay(data.newQty);
+        }
+    });
+}
+
+function removeFromCart(productId) {
+    fetch(`/Cart/Remove?productId=${productId}`, {
+        method: 'POST',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('add-btn-container').classList.remove('d-none');
+            document.getElementById('qty-stepper').classList.add('d-none');
+            document.getElementById('remove-btn-container')?.classList.add('d-none');
+            
+            showAppToast(data.message);
+            updateBadge(data.totalItems);
+            updateStockDisplay(0);
+        }
+    });
+}
+
+function updateStockDisplay(cartQty) {
+    const badge = document.getElementById('stock-badge-details');
+    if (!badge) return;
+    const initialStock = parseInt(badge.getAttribute('data-initial-stock'));
+    const remaining = initialStock - cartQty;
+    const textSpan = badge.querySelector('.stock-text');
+    const icon = badge.querySelector('i');
+    
+    badge.className = `badge fs-6 rounded-pill px-3 badge-premium ${remaining <= 0 ? 'bg-danger' : (remaining < 10 ? 'bg-warning text-dark' : 'bg-success')}`;
+    icon.className = `fas ${remaining < 10 ? (remaining <= 0 ? 'fa-times-circle' : 'fa-exclamation-triangle') : 'fa-check-circle'} me-1`;
+
+    if (remaining <= 0) {
+        textSpan.innerText = '@Localizer["نفد"].Value';
+    } else {
+        let txt = '@Localizer["متوفر"].Value';
+        if (remaining < 10) txt += ` (@Localizer["بقي"].Value ${remaining})`;
+        textSpan.innerText = txt;
+    }
+}
+function toggleWishlist(productId) {
+    fetch(`/Wishlist/Toggle?productId=${productId}`, {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+        }
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            const btn = document.getElementById(`wishlist-btn-${productId}`);
+            const icon = btn.querySelector('i');
+            if (data.added) {
+                btn.classList.replace('btn-outline-danger', 'btn-danger');
+                icon.classList.replace('far', 'fas');
+            } else {
+                btn.classList.replace('btn-danger', 'btn-outline-danger');
+                icon.classList.replace('fas', 'far');
+            }
+            showAppToast(data.message);
+        }
+    });
+}
+
+function highlightStars(rating) {
+    for (let i = 1; i <= 5; i++) {
+        const star = document.querySelector(`label[for="star-${i}"] i`);
+        if (i <= rating) {
+            star.classList.replace('far', 'fas');
+            star.classList.add('text-warning');
+        } else {
+            star.classList.replace('fas', 'far');
+            star.classList.remove('text-warning');
+        }
+    }
+}
+
+function submitReview(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+
+    fetch('/Reviews/Create', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+        }
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            showAppToast(data.message);
+            setTimeout(() => location.reload(), 1500);
+        } else {
+            alert(data.message);
         }
     });
 }

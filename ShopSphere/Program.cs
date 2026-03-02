@@ -52,6 +52,8 @@ namespace ShopSphere
             builder.Services.AddScoped<IEntityRepo<Category, int>, CategoryRepo>();
             builder.Services.AddScoped<IProductRepo, ProductRepo>();
             builder.Services.AddScoped<IEntityRepo<Product, int>, ProductRepo>();
+            builder.Services.AddScoped<IWishlistRepo, WishlistRepo>();
+            builder.Services.AddScoped<IEntityRepo<WishlistItem, int>, WishlistRepo>();
             builder.Services.AddTransient<Microsoft.AspNetCore.Identity.UI.Services.IEmailSender, ShopSphere.Services.EmailSender>();
             
             builder.Services.AddSession(options =>

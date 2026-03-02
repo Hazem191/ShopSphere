@@ -117,11 +117,20 @@ namespace ShopSphere.Controllers
             return RedirectToAction("Index");
         }
 
+        [AcceptVerbs("GET", "POST")]
         public IActionResult Remove(int productId)
         {
             var cart = GetCart();
             cart.RemoveAll(c => c.ProductId == productId);
             SaveCart(cart);
+
+            if (Request.IsAjax())
+            {
+                int totalItems = cart.Sum(c => c.Quantity);
+                string message = _localizer["تم حذف المنتج من السلة"].Value;
+                return Json(new { success = true, message, totalItems });
+            }
+
             return RedirectToAction("Index");
         }
 

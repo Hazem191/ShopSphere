@@ -5,17 +5,6 @@
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
               <xsd:attribute name="alias" type="xsd:string" />
@@ -58,40 +47,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="الرئيسية" xml:space="preserve">
-    <value>Home</value>
-  </data>
-  <data name="المنتجات" xml:space="preserve">
-    <value>Products</value>
-  </data>
-  <data name="الفئات" xml:space="preserve">
-    <value>Categories</value>
-  </data>
-  <data name="طلبات العملاء" xml:space="preserve">
-    <value>Customer Orders</value>
-  </data>
-  <data name="لوحة التحكم" xml:space="preserve">
-    <value>Dashboard</value>
-  </data>
-  <data name="كل الحقوق محفوظة." xml:space="preserve">
-    <value>All Rights Reserved.</value>
-  </data>
-  <data name="الجودة التي تستحقها" xml:space="preserve">
-    <value>Quality you deserve</value>
-  </data>
-  <data name="صُنع بواسطة" xml:space="preserve">
-    <value>Developed by</value>
-  </data>
-  <data name="حسابي" xml:space="preserve">
-    <value>My Account</value>
-  </data>
-  <data name="الطلبات" xml:space="preserve">
-    <value>Orders Management</value>
-  </data>
-  <data name="تغيير السمة" xml:space="preserve">
-    <value>Toggle Theme</value>
-  </data>
-  <data name="الأمنيات" xml:space="preserve">
-    <value>Wishlist</value>
-  </data>
+  <data name="قائمة الأمنيات" xml:space="preserve"><value>Wishlist</value></data>
+  <data name="الرئيسية" xml:space="preserve"><value>Home</value></data>
+  <data name="قائمة الأمنيات الخاصة بك" xml:space="preserve"><value>Your Wishlist</value></data>
+  <data name="منتج" xml:space="preserve"><value>product(s)</value></data>
+  <data name="قائمة الأمنيات فارغة" xml:space="preserve"><value>Your Wishlist is Empty</value></data>
+  <data name="ابدأ بإضافة بعض المنتجات التي تعجبك!" xml:space="preserve"><value>Start adding some products you like!</value></data>
+  <data name="اكتشف كل المنتجات" xml:space="preserve"><value>Discover All Products</value></data>
+  <data name="التفاصيل" xml:space="preserve"><value>Details</value></data>
+  <data name="أضف للسلة" xml:space="preserve"><value>Add to Cart</value></data>
+  <data name="ج.م" xml:space="preserve"><value>EGP</value></data>
 </root>
