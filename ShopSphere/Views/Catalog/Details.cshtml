@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = Model.Name;
     var isRTL = System.Globalization.CultureInfo.CurrentCulture.Name.StartsWith("ar");
+    var deleteConfirmMsg = Localizer["هل تريد حذف هذا المنتج؟"].Value;
 }
 
 <nav aria-label="breadcrumb" class="mb-4">
@@ -108,7 +109,7 @@
                 </a>
                 <a asp-area="Admin" asp-controller="Products" asp-action="Delete" asp-route-id="@Model.Id"
                    class="btn btn-danger btn-lg rounded-pill px-4 shadow-sm"
-                   onclick="return confirm('@Localizer["هل تريد حذف هذا المنتج؟"].Value')">
+                   onclick="return confirm('@Html.Raw(deleteConfirmMsg.Replace("'", "\\'"))')">
                     <i class="fas fa-trash-alt me-2"></i> @Localizer["حذف"].Value
                 </a>
             }

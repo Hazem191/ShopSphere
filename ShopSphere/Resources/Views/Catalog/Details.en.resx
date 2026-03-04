@@ -1,5 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -58,30 +117,88 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="الرئيسية" xml:space="preserve"><value>Home</value></data>
-  <data name="المنتجات" xml:space="preserve"><value>Products</value></data>
-  <data name="متوفر" xml:space="preserve"><value>In Stock</value></data>
-  <data name="قطعة" xml:space="preserve"><value>piece(s)</value></data>
-  <data name="نفد من المخزون" xml:space="preserve"><value>Out of Stock</value></data>
-  <data name="ج.م" xml:space="preserve"><value>EGP</value></data>
-  <data name="الوصف" xml:space="preserve"><value>Description</value></data>
-  <data name="أضف إلى السلة" xml:space="preserve"><value>Add to Cart</value></data>
-  <data name="عودة" xml:space="preserve"><value>Back</value></data>
-  <data name="شحن سريع" xml:space="preserve"><value>Fast Shipping</value></data>
-  <data name="دفع آمن" xml:space="preserve"><value>Secure Payment</value></data>
-  <data name="إرجاع مجاني" xml:space="preserve"><value>Free Return</value></data>
-  <data name="كمية محدودة جداً!" xml:space="preserve"><value>Very limited quantity!</value></data>
-  <data name="متبقي" xml:space="preserve"><value>left</value></data>
-  <data name="المراجعات" xml:space="preserve"><value>Reviews</value></data>
-  <data name="أضف مراجعتك" xml:space="preserve"><value>Add your review</value></data>
-  <data name="التقييم" xml:space="preserve"><value>Rating</value></data>
-  <data name="اكتب تعليقك هنا..." xml:space="preserve"><value>Write your comment here...</value></data>
-  <data name="إرسال المراجعة" xml:space="preserve"><value>Submit Review</value></data>
-  <data name="يرجى تسجيل الدخول لتتمكن من إضافة مراجعة." xml:space="preserve"><value>Please log in to add a review.</value></data>
-  <data name="لا توجد مراجعات بعد. كن أول من يكتب مراجعة!" xml:space="preserve"><value>No reviews yet. Be the first to write one!</value></data>
-  <data name="جاري الإضافة..." xml:space="preserve"><value>Adding...</value></data>
-  <data name="أضف" xml:space="preserve"><value>Add</value></data>
-  <data name="بقي" xml:space="preserve"><value>left</value></data>
-  <data name="نفد" xml:space="preserve"><value>Out</value></data>
-  <data name="حذف" xml:space="preserve"><value>Remove</value></data>
+  <data name="الرئيسية" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="المنتجات" xml:space="preserve">
+    <value>Products</value>
+  </data>
+  <data name="متوفر" xml:space="preserve">
+    <value>In Stock</value>
+  </data>
+  <data name="قطعة" xml:space="preserve">
+    <value>piece(s)</value>
+  </data>
+  <data name="نفد من المخزون" xml:space="preserve">
+    <value>Out of Stock</value>
+  </data>
+  <data name="ج.م" xml:space="preserve">
+    <value>EGP</value>
+  </data>
+  <data name="الوصف" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="أضف إلى السلة" xml:space="preserve">
+    <value>Add to Cart</value>
+  </data>
+  <data name="عودة" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="شحن سريع" xml:space="preserve">
+    <value>Fast Shipping</value>
+  </data>
+  <data name="دفع آمن" xml:space="preserve">
+    <value>Secure Payment</value>
+  </data>
+  <data name="إرجاع مجاني" xml:space="preserve">
+    <value>Free Return</value>
+  </data>
+  <data name="كمية محدودة جداً!" xml:space="preserve">
+    <value>Very limited quantity!</value>
+  </data>
+  <data name="متبقي" xml:space="preserve">
+    <value>left</value>
+  </data>
+  <data name="المراجعات" xml:space="preserve">
+    <value>Reviews</value>
+  </data>
+  <data name="أضف مراجعتك" xml:space="preserve">
+    <value>Add your review</value>
+  </data>
+  <data name="التقييم" xml:space="preserve">
+    <value>Rating</value>
+  </data>
+  <data name="اكتب تعليقك هنا..." xml:space="preserve">
+    <value>Write your comment here...</value>
+  </data>
+  <data name="إرسال المراجعة" xml:space="preserve">
+    <value>Submit Review</value>
+  </data>
+  <data name="يرجى تسجيل الدخول لتتمكن من إضافة مراجعة." xml:space="preserve">
+    <value>Please log in to add a review.</value>
+  </data>
+  <data name="لا توجد مراجعات بعد. كن أول من يكتب مراجعة!" xml:space="preserve">
+    <value>No reviews yet. Be the first to write one!</value>
+  </data>
+  <data name="جاري الإضافة..." xml:space="preserve">
+    <value>Adding...</value>
+  </data>
+  <data name="أضف" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="بقي" xml:space="preserve">
+    <value>left</value>
+  </data>
+  <data name="نفد" xml:space="preserve">
+    <value>Out</value>
+  </data>
+  <data name="حذف" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="تعديل" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="هل تريد حذف هذا المنتج؟" xml:space="preserve">
+    <value>Are you sure you want to delete this product?</value>
+  </data>
 </root>
