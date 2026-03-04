@@ -147,7 +147,7 @@
                                                 <span class="text-muted small">@p.Reviews.Average(r => r.Rating).ToString("0.0")</span>
                                             </div>
                                         }
-                                        @if (User.Identity.IsAuthenticated)
+                                        @if (User.Identity.IsAuthenticated && !User.IsInRole("Admin"))
                                         {
                                             var isInWishlist = p.WishlistItems?.Any(w => w.UserId == User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value) ?? false;
                                             <button type="button" onclick="toggleWishlist(this, @p.Id)" 

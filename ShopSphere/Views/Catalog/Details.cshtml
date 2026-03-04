@@ -46,7 +46,7 @@
                 </span>
             </span>
             
-            @if (User.Identity.IsAuthenticated)
+            @if (User.Identity.IsAuthenticated && !User.IsInRole("Admin"))
             {
                 var isInWishlist = Model.WishlistItems?.Any(w => w.UserId == User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value) ?? false;
                 <button type="button" onclick="toggleWishlist(@Model.Id)" id="wishlist-btn-@Model.Id" 

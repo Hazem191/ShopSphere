@@ -295,7 +295,7 @@
                         <li class="nav-item">
                             <a class="nav-link px-3 @(Context.Request.Path.StartsWithSegments("/Home/Privacy") ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Privacy">@Localizer["الخصوصية"]</a>
                         </li>
-                        @if (User.Identity.IsAuthenticated)
+                        @if (User.Identity.IsAuthenticated && !User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link px-3 @(Context.Request.Path.StartsWithSegments("/Wishlist") ? "active" : "")" asp-area="" asp-controller="Wishlist" asp-action="Index">@Localizer["الأمنيات"]</a>
