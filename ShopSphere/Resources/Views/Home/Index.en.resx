@@ -69,4 +69,6 @@
   <data name="إرجاع مجاني" xml:space="preserve"><value>Free Returns</value></data>
   <data name="أرجع طلبك خلال 14 يوم بدون أي رسوم" xml:space="preserve"><value>Return your order within 14 days without any fees.</value></data>
   <data name="ابدأ التسوق الآن" xml:space="preserve"><value>Start Shopping Now</value></data>
+  <data name="إدارة المنتجات" xml:space="preserve"><value>Manage Products</value></data>
+  <data name="إدارة الطلبات" xml:space="preserve"><value>Manage Orders</value></data>
 </root>

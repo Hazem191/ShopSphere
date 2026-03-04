@@ -1,76 +1,124 @@
-﻿@{
-    ViewData["Title"] = "سياسة الخصوصية";
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["سياسة الخصوصية"];
 }
 
-<div class="rounded-4 text-white p-5 mb-5" style="background: linear-gradient(135deg,#6c3fc5,#9b6ef3);">
+<div class="rounded-4 text-white p-5 mb-5 shadow-premium" style="background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));">
     <div class="row align-items-center">
         <div class="col-md-12">
             <h1 class="display-4 fw-bold mb-3">
-                <i class="fas fa-shield-alt me-2"></i> سياسة الخصوصية
+                <i class="fas fa-shield-alt me-2"></i> @Localizer["سياسة الخصوصية"]
             </h1>
-            <p class="lead mb-4">
-                نحرص على حماية بياناتك وخصوصيتك أثناء استخدامك لموقعنا. تعرف على كيفية جمعنا للبيانات واستخدامها.
+            <p class="lead mb-0 opacity-75">
+                @Localizer["نحرص على حماية بياناتك وخصوصيتك أثناء استخدامك لموقعنا. تعرف على كيفية جمعنا للبيانات واستخدامها."]
             </p>
         </div>
     </div>
 </div>
 
 <div class="row g-4 mb-5">
-    <div class="col-12">
-        <div class="card h-100 p-4 mb-3">
-            <h5 class="fw-bold section-title">المعلومات التي نجمعها</h5>
-            <p class="text-muted">
-                نحن نقوم بجمع معلوماتك الشخصية مثل الاسم، البريد الإلكتروني، ورقم الهاتف، بالإضافة إلى معلومات غير شخصية مثل بيانات التصفح وملفات تعريف الارتباط (Cookies).
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 border-0 shadow-sm p-4 hover-scale">
+            <div class="d-flex align-items-center mb-3">
+                <div class="bg-primary bg-opacity-10 p-2 rounded-3 me-3">
+                    <i class="fas fa-database text-primary fs-4"></i>
+                </div>
+                <h5 class="fw-bold mb-0">@Localizer["المعلومات التي نجمعها"]</h5>
+            </div>
+            <p class="text-muted small mb-0">
+                @Localizer["نحن نقوم بجمع معلوماتك الشخصية مثل الاسم، البريد الإلكتروني، ورقم الهاتف، بالإضافة إلى معلومات غير شخصية مثل بيانات التصفح وملفات تعريف الارتباط (Cookies)."]
             </p>
         </div>
+    </div>
 
-        <div class="card h-100 p-4 mb-3">
-            <h5 class="fw-bold section-title">كيفية استخدام المعلومات</h5>
-            <p class="text-muted">
-                تُستخدم البيانات لتحسين تجربتك على الموقع، التواصل معك، وتحليل الاستخدام لتحسين الخدمات.
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 border-0 shadow-sm p-4 hover-scale">
+            <div class="d-flex align-items-center mb-3">
+                <div class="bg-success bg-opacity-10 p-2 rounded-3 me-3">
+                    <i class="fas fa-chart-line text-success fs-4"></i>
+                </div>
+                <h5 class="fw-bold mb-0">@Localizer["كيفية استخدام المعلومات"]</h5>
+            </div>
+            <p class="text-muted small mb-0">
+                @Localizer["تُستخدم البيانات لتحسين تجربتك على الموقع، التواصل معك، وتحليل الاستخدام لتحسين الخدمات."]
             </p>
         </div>
+    </div>
 
-        <div class="card h-100 p-4 mb-3">
-            <h5 class="fw-bold section-title">مشاركة المعلومات مع أطراف ثالثة</h5>
-            <p class="text-muted">
-                لا نبيع بياناتك لأي جهة. قد نشارك بعض البيانات مع شركاء يقدمون خدمات للموقع أو للإعلانات المخصصة، مع الحفاظ على الخصوصية.
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 border-0 shadow-sm p-4 hover-scale">
+            <div class="d-flex align-items-center mb-3">
+                <div class="bg-warning bg-opacity-10 p-2 rounded-3 me-3">
+                    <i class="fas fa-users text-warning fs-4"></i>
+                </div>
+                <h5 class="fw-bold mb-0">@Localizer["مشاركة المعلومات مع أطراف ثالثة"]</h5>
+            </div>
+            <p class="text-muted small mb-0">
+                @Localizer["لا نبيع بياناتك لأي جهة. قد نشارك بعض البيانات مع شركاء يقدمون خدمات للموقع أو للإعلانات المخصصة، مع الحفاظ على الخصوصية."]
             </p>
         </div>
+    </div>
 
-        <div class="card h-100 p-4 mb-3">
-            <h5 class="fw-bold section-title">Cookies وتقنيات التتبع</h5>
-            <p class="text-muted">
-                نستخدم ملفات الكوكيز لتخصيص المحتوى وتحليل استخدام الموقع. يمكنك تعطيلها من إعدادات المتصفح.
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 border-0 shadow-sm p-4 hover-scale">
+            <div class="d-flex align-items-center mb-3">
+                <div class="bg-info bg-opacity-10 p-2 rounded-3 me-3">
+                    <i class="fas fa-cookie-bite text-info fs-4"></i>
+                </div>
+                <h5 class="fw-bold mb-0">@Localizer["Cookies وتقنيات التتبع"]</h5>
+            </div>
+            <p class="text-muted small mb-0">
+                @Localizer["نستخدم ملفات الكوكيز لتخصيص المحتوى وتحليل استخدام الموقع. يمكنك تعطيلها من إعدادات المتصفح."]
             </p>
         </div>
+    </div>
 
-        <div class="card h-100 p-4 mb-3">
-            <h5 class="fw-bold section-title">حماية المعلومات</h5>
-            <p class="text-muted">
-                نطبق إجراءات أمنية لحماية بياناتك مثل التشفير وجدران الحماية.
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 border-0 shadow-sm p-4 hover-scale">
+            <div class="d-flex align-items-center mb-3">
+                <div class="bg-danger bg-opacity-10 p-2 rounded-3 me-3">
+                    <i class="fas fa-user-shield text-danger fs-4"></i>
+                </div>
+                <h5 class="fw-bold mb-0">@Localizer["حماية المعلومات"]</h5>
+            </div>
+            <p class="text-muted small mb-0">
+                @Localizer["نطبق إجراءات أمنية لحماية بياناتك مثل التشفير وجدران الحماية."]
             </p>
         </div>
+    </div>
 
-        <div class="card h-100 p-4 mb-3">
-            <h5 class="fw-bold section-title">حقوق المستخدمين</h5>
-            <p class="text-muted">
-                لديك الحق في الوصول إلى بياناتك، تعديلها، حذفها، أو سحب موافقتك على استخدامها لأي أغراض تسويقية.
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 border-0 shadow-sm p-4 hover-scale">
+            <div class="d-flex align-items-center mb-3">
+                <div class="bg-dark bg-opacity-10 p-2 rounded-3 me-3">
+                    <i class="fas fa-gavel text-dark fs-4"></i>
+                </div>
+                <h5 class="fw-bold mb-0">@Localizer["حقوق المستخدمين"]</h5>
+            </div>
+            <p class="text-muted small mb-0">
+                @Localizer["لديك الحق في الوصول إلى بياناتك، تعديلها، حذفها، أو سحب موافقتك على استخدامها لأي أغراض تسويقية."]
             </p>
         </div>
+    </div>
+</div>
 
-        <div class="card h-100 p-4 mb-3">
-            <h5 class="fw-bold section-title">تغييرات سياسة الخصوصية</h5>
-            <p class="text-muted">
-                سنقوم بإبلاغك عند أي تعديل على سياسة الخصوصية. آخر تحديث للصفحة: @DateTime.Now.ToString("yyyy-MM-dd").
+<div class="row g-4 mb-5">
+    <div class="col-md-8">
+        <div class="card border-0 shadow-premium p-4">
+            <h5 class="fw-bold mb-3"><i class="fas fa-history me-2 text-primary"></i> @Localizer["تغييرات سياسة الخصوصية"]</h5>
+            <p class="text-muted mb-0">
+                @Localizer["سنقوم بإبلاغك عند أي تعديل على سياسة الخصوصية. آخر تحديث للصفحة:"] <span class="fw-bold text-primary">@DateTime.Now.ToString("yyyy-MM-dd")</span>
             </p>
         </div>
-
-        <div class="card h-100 p-4 mb-3">
-            <h5 class="fw-bold section-title">جهة الاتصال</h5>
-            <p class="text-muted">
-                لأي استفسار حول الخصوصية، يمكنك التواصل معنا عبر البريد الإلكتروني: <a href="mailto:hazem.aldriny@gmail.com">info@shopsphere.com</a>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-premium p-4 bg-primary text-white">
+            <h5 class="fw-bold mb-3 text-white"><i class="fas fa-envelope-open-text me-2"></i> @Localizer["جهة الاتصال"]</h5>
+            <p class="small mb-0 opacity-75">
+                @Localizer["لأي استفسار حول الخصوصية، يمكنك التواصل معنا عبر البريد الإلكتروني:"]
             </p>
+            <a href="mailto:info@shopsphere.com" class="text-white fw-bold text-decoration-none mt-2 d-block">info@shopsphere.com</a>
         </div>
     </div>
 </div>

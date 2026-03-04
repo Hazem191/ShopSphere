@@ -12,9 +12,18 @@
                 <i class="fas fa-store me-2"></i> @Localizer["مرحباً بك في ShopSphere"]
             </h1>
             <p class="lead mb-4">@Localizer["اكتشف أحدث المنتجات بأفضل الأسعار. تسوق بسهولة وأمان."]</p>
-            <a asp-controller="Catalog" asp-action="Index" class="btn btn-light btn-lg fw-bold px-5 rounded-pill shadow-sm">
-                <i class="fas fa-th me-2"></i> @Localizer["تصفح المنتجات"]
-            </a>
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="btn btn-light btn-lg fw-bold px-5 rounded-pill shadow-sm">
+                    <i class="fas fa-boxes me-2"></i> @Localizer["إدارة المنتجات"]
+                </a>
+            }
+            else
+            {
+                <a asp-controller="Catalog" asp-action="Index" class="btn btn-light btn-lg fw-bold px-5 rounded-pill shadow-sm">
+                    <i class="fas fa-th me-2"></i> @Localizer["تصفح المنتجات"]
+                </a>
+            }
         </div>
         <div class="col-md-5 text-center d-none d-md-block">
             <i class="fas fa-shopping-bag" style="font-size:8rem;opacity:.3;"></i>
@@ -47,7 +56,16 @@
 </div>
 
 <div class="text-center py-4">
-    <a asp-controller="Catalog" asp-action="Index" class="btn btn-primary btn-lg px-5 rounded-pill shadow-sm border-0 py-3 fw-bold">
-        <i class="fas fa-@(isRTL ? "arrow-right" : "arrow-left") me-2"></i> @Localizer["ابدأ التسوق الآن"]
-    </a>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-area="Admin" asp-controller="AdminOrders" asp-action="Index" class="btn btn-primary btn-lg px-5 rounded-pill shadow-sm border-0 py-3 fw-bold">
+            <i class="fas fa-clipboard-list me-2"></i> @Localizer["إدارة الطلبات"]
+        </a>
+    }
+    else
+    {
+        <a asp-controller="Catalog" asp-action="Index" class="btn btn-primary btn-lg px-5 rounded-pill shadow-sm border-0 py-3 fw-bold">
+            <i class="fas fa-@(isRTL ? "arrow-right" : "arrow-left") me-2"></i> @Localizer["ابدأ التسوق الآن"]
+        </a>
+    }
 </div>

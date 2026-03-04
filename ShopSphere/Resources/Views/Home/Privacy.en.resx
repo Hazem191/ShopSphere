@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="سياسة الخصوصية" xml:space="preserve">
+    <value>Privacy Policy</value>
+  </data>
+  <data name="خصوصيتك تهمنا" xml:space="preserve">
+    <value>Your Privacy Matters</value>
+  </data>
+  <data name="نحرص على حماية بياناتك وخصوصيتك أثناء استخدامك لموقعنا. تعرف على كيفية جمعنا للبيانات واستخدامها." xml:space="preserve">
+    <value>We are committed to protecting your data and privacy while using our site. Learn about how we collect and use data.</value>
+  </data>
+  <data name="المعلومات التي نجمعها" xml:space="preserve">
+    <value>Information We Collect</value>
+  </data>
+  <data name="نحن نقوم بجمع معلوماتك الشخصية مثل الاسم، البريد الإلكتروني، ورقم الهاتف، بالإضافة إلى معلومات غير شخصية مثل بيانات التصفح وملفات تعريف الارتباط (Cookies)." xml:space="preserve">
+    <value>We collect personal information such as name, email, and phone number, in addition to non-personal information such as browsing data and cookies.</value>
+  </data>
+  <data name="كيفية استخدام المعلومات" xml:space="preserve">
+    <value>How We Use Information</value>
+  </data>
+  <data name="تُستخدم البيانات لتحسين تجربتك على الموقع، التواصل معك، وتحليل الاستخدام لتحسين الخدمات." xml:space="preserve">
+    <value>The data is used to improve your experience on the site, communicate with you, and analyze usage to improve services.</value>
+  </data>
+  <data name="مشاركة المعلومات مع أطراف ثالثة" xml:space="preserve">
+    <value>Sharing Information with Third Parties</value>
+  </data>
+  <data name="لا نبيع بياناتك لأي جهة. قد نشارك بعض البيانات مع شركاء يقدمون خدمات للموقع أو للإعلانات المخصصة، مع الحفاظ على الخصوصية." xml:space="preserve">
+    <value>We do not sell your data to any party. We may share some data with partners who provide services to the site or for personalized advertisements, while maintaining privacy.</value>
+  </data>
+  <data name="Cookies وتقنيات التتبع" xml:space="preserve">
+    <value>Cookies and Tracking Technologies</value>
+  </data>
+  <data name="نستخدم ملفات الكوكيز لتخصيص المحتوى وتحليل استخدام الموقع. يمكنك تعطيلها من إعدادات المتصفح." xml:space="preserve">
+    <value>We use cookies to personalize content and analyze site usage. You can disable them from your browser settings.</value>
+  </data>
+  <data name="حماية المعلومات" xml:space="preserve">
+    <value>Information Protection</value>
+  </data>
+  <data name="نطبق إجراءات أمنية لحماية بياناتك مثل التشفير وجدران الحماية." xml:space="preserve">
+    <value>We apply security measures to protect your data, such as encryption and firewalls.</value>
+  </data>
+  <data name="حقوق المستخدمين" xml:space="preserve">
+    <value>User Rights</value>
+  </data>
+  <data name="لديك الحق في الوصول إلى بياناتك، تعديلها، حذفها، أو سحب موافقتك على استخدامها لأي أغراض تسويقية." xml:space="preserve">
+    <value>You have the right to access, modify, or delete your data, or withdraw your consent for its use for any marketing purposes.</value>
+  </data>
+  <data name="تغييرات سياسة الخصوصية" xml:space="preserve">
+    <value>Privacy Policy Changes</value>
+  </data>
+  <data name="سنقوم بإبلاغك عند أي تعديل على سياسة الخصوصية. آخر تحديث للصفحة:" xml:space="preserve">
+    <value>We will inform you of any amendments to the privacy policy. Last updated:</value>
+  </data>
+  <data name="جهة الاتصال" xml:space="preserve">
+    <value>Contact Information</value>
+  </data>
+  <data name="لأي استفسار حول الخصوصية، يمكنك التواصل معنا عبر البريد الإلكتروني:" xml:space="preserve">
+    <value>For any inquiries regarding privacy, you can contact us via email:</value>
+  </data>
+</root>

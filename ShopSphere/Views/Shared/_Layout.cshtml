@@ -292,6 +292,9 @@
                         <li class="nav-item">
                             <a class="nav-link px-3 @(Context.Request.Path.StartsWithSegments("/Catalog") ? "active" : "")" asp-area="" asp-controller="Catalog" asp-action="Index">@Localizer["المنتجات"]</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3 @(Context.Request.Path.StartsWithSegments("/Home/Privacy") ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Privacy">@Localizer["الخصوصية"]</a>
+                        </li>
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
@@ -411,6 +414,8 @@
                     </div>
                     <p class="text-muted small mb-0">
                         &copy; @DateTime.Now.Year @Localizer["كل الحقوق محفوظة."] 
+                        <span class="mx-2 opacity-25">|</span> 
+                        <a asp-action="Privacy" asp-controller="Home" class="text-decoration-none text-muted transition-all" style="font-size: 0.85rem;">@Localizer["سياسة الخصوصية"]</a>
                         <span class="mx-2 opacity-25">|</span> 
                         @Localizer["الجودة التي تستحقها"]
                     </p>

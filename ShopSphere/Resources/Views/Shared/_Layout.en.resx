@@ -94,4 +94,10 @@
   <data name="الأمنيات" xml:space="preserve">
     <value>Wishlist</value>
   </data>
+  <data name="الخصوصية" xml:space="preserve">
+    <value>Privacy</value>
+  </data>
+  <data name="سياسة الخصوصية" xml:space="preserve">
+    <value>Privacy Policy</value>
+  </data>
 </root>
