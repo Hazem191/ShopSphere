@@ -100,11 +100,25 @@
                     </button>
                 </div>
             }
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-area="Admin" asp-controller="Products" asp-action="Edit" asp-route-id="@Model.Id"
+                   class="btn btn-warning btn-lg rounded-pill px-4 shadow-sm">
+                    <i class="fas fa-edit me-2"></i> @Localizer["تعديل"].Value
+                </a>
+                <a asp-area="Admin" asp-controller="Products" asp-action="Delete" asp-route-id="@Model.Id"
+                   class="btn btn-danger btn-lg rounded-pill px-4 shadow-sm"
+                   onclick="return confirm('@Localizer["هل تريد حذف هذا المنتج؟"].Value')">
+                    <i class="fas fa-trash-alt me-2"></i> @Localizer["حذف"].Value
+                </a>
+            }
             <a asp-area="" asp-action="Index" class="btn btn-outline-secondary btn-lg rounded-pill px-4">
                 <i class="fas fa-@(isRTL ? "arrow-right" : "arrow-left") me-1"></i> @Localizer["عودة"].Value
             </a>
         </div>
 
+        @if (!User.IsInRole("Admin"))
+        {
         <hr class="my-5 opacity-10">
 
         <!-- Reviews Section -->
@@ -183,6 +197,7 @@
                 }
             </div>
         </div>
+        }
 
         <div class="row text-center g-3 mt-4">
             <div class="col-4">
